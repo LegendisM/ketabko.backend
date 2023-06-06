@@ -1,5 +1,5 @@
 export interface IAuthJwt {
-    id: string;
+    id: number;
     username: string;
 }
 

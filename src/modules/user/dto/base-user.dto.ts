@@ -1,10 +1,13 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsString, IsEmail, Length } from "class-validator";
+import { IsString, IsEmail, Length, IsArray, IsNumber } from "class-validator";
+import { Role } from "../interface/role.interface";
+import { Transform } from "class-transformer";
 
 export class BaseUserDto {
     @ApiProperty()
-    @IsString()
-    id: string;
+    @Transform(({ value }) => parseInt(value))
+    @IsNumber()
+    id: number;
 
     @ApiProperty({
         minLength: 3,
@@ -25,4 +28,11 @@ export class BaseUserDto {
     @IsString()
     @Length(4, 18)
     password: string;
+
+    @ApiProperty({
+        enum: Role,
+        isArray: true
+    })
+    @IsArray()
+    roles: Role[];
 }

@@ -1,7 +1,8 @@
+import _ from "lodash";
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { User } from "./entity/user.entity";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import { FindOptionsWhere, Repository } from "typeorm";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
 
@@ -16,7 +17,7 @@ export class UserService {
         return await this.userRepository.save(user);
     }
 
-    async findOne(filter: Partial<User>, exception: boolean = false): Promise<User> {
+    async findOne(filter: FindOptionsWhere<User>, exception: boolean = false): Promise<User> {
         const user = await this.userRepository.findOne({ where: filter });
         if (exception && !user) {
             throw new NotFoundException('Invalid FindOne User With This Filter');
@@ -24,7 +25,7 @@ export class UserService {
         return user;
     }
 
-    async findById(id: string, exception: boolean = false): Promise<User> {
+    async findById(id: number, exception: boolean = false): Promise<User> {
         const user = await this.userRepository.findOneBy({ id });
         if (exception && !user) {
             throw new NotFoundException(`Invalid FindOne User With Id ${id}`);
@@ -32,13 +33,13 @@ export class UserService {
         return user;
     }
 
-    async update(id: string, updateDto: UpdateUserDto) {
+    async update(id: number, updateDto: UpdateUserDto): Promise<User> {
         const user = await this.findById(id, true);
         Object.assign(user, updateDto);
         return await this.userRepository.save(user);
     }
 
-    async remove(id: string) {
+    async remove(id: number): Promise<User> {
         const user = await this.findById(id, true);
         return await this.userRepository.remove(user);
     }

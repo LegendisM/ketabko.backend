@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from '../user/user.module';
 import { HeaderResolver, I18nModule } from 'nestjs-i18n';
 import { AuthModule } from '../auth/auth.module';
+import { BookModule } from '../book/book.module';
 
 @Module({
   imports: [
@@ -28,12 +29,13 @@ import { AuthModule } from '../auth/auth.module';
         username: configService.get('POSTGRES_USERNAME'),
         password: configService.get('POSTGRES_PASSWORD'),
         entities: [`${__dirname}/../**/*.entity{.ts,.js}`],
-        synchronize: true
+        synchronize: configService.get('NODE_ENV') != 'production'
       }),
       inject: [ConfigService]
     }),
     UserModule,
     AuthModule,
+    BookModule,
   ],
 })
 export class AppModule { }
