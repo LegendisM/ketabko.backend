@@ -1,7 +1,7 @@
-import { OmitType } from "@nestjs/swagger";
+import { PickType } from "@nestjs/swagger";
 import { BaseUserDto } from "./base-user.dto";
 
-export class UpdateUserDto extends OmitType(
+export class UpdateUserDto extends PickType(
     BaseUserDto,
-    ['id']
+    ['username', 'email', 'password']
 ) { }

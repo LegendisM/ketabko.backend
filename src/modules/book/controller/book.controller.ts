@@ -36,12 +36,12 @@ export class BookController {
         @Param('id') id: string,
         @Body() updateDto: UpdateBookDto
     ) {
-        await this.bookService.update(Number(id), updateDto);
+        await this.bookService.update(id, updateDto);
     }
 
     @Roles(Role.Admin)
     @Delete('/:id')
     async removeBook(@Param('id') id: string) {
-        await this.bookService.remove(Number(id));
+        await this.bookService.remove(id);
     }
 }

@@ -25,7 +25,7 @@ export class UserService {
         return user;
     }
 
-    async findById(id: number, exception: boolean = false): Promise<User> {
+    async findById(id: string, exception: boolean = false): Promise<User> {
         const user = await this.userRepository.findOneBy({ id });
         if (exception && !user) {
             throw new NotFoundException(`Invalid FindOne User With Id ${id}`);
@@ -33,13 +33,13 @@ export class UserService {
         return user;
     }
 
-    async update(id: number, updateDto: UpdateUserDto): Promise<User> {
+    async update(id: string, updateDto: UpdateUserDto): Promise<User> {
         const user = await this.findById(id, true);
         Object.assign(user, updateDto);
         return await this.userRepository.save(user);
     }
 
-    async remove(id: number): Promise<User> {
+    async remove(id: string): Promise<User> {
         const user = await this.findById(id, true);
         return await this.userRepository.remove(user);
     }

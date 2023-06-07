@@ -2,6 +2,7 @@ import { Test, TestingModule } from "@nestjs/testing";
 import { UserService } from "../user.service";
 import { User } from "../entity/user.entity";
 import { getRepositoryToken } from "@nestjs/typeorm";
+import { UpdateUserDto } from "../dto/update-user.dto";
 
 describe('User Service', () => {
     let service: UserService;
@@ -110,9 +111,10 @@ describe('User Service', () => {
 
         it('update user successfully', async () => {
             const mockUserValue = { id: 'uuid', username: 'alexa', email: '' } as User;
+            const mockUpdateValue = { username: 'alexa', email: '' } as UpdateUserDto;
             mockUserRepository.findOneBy.mockResolvedValue(mockUserValue);
             mockUserRepository.save.mockResolvedValue(mockUserValue);
-            const user = await service.update('uuid', mockUserValue);
+            const user = await service.update('uuid', mockUpdateValue);
             expect(user).toBeDefined();
             expect(user.id).toBe('uuid');
         });

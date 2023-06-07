@@ -1,12 +1,11 @@
-import { IsNumber, IsOptional, IsString, Length, Max, Min } from "class-validator";
+import { IsNumber, IsOptional, IsString, IsUUID, Length, Max, Min } from "class-validator";
 import { Transform } from "class-transformer";
 import { ApiProperty } from "@nestjs/swagger";
 
 export class BaseBookDto {
     @ApiProperty()
-    @Transform(({ value }) => parseInt(value))
-    @IsNumber()
-    id: number;
+    @IsUUID()
+    id: string;
 
     @ApiProperty({
         minLength: 1,

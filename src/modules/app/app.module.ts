@@ -6,6 +6,7 @@ import { UserModule } from '../user/user.module';
 import { HeaderResolver, I18nModule } from 'nestjs-i18n';
 import { AuthModule } from '../auth/auth.module';
 import { BookModule } from '../book/book.module';
+import { OrderModule } from '../order/order.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { BookModule } from '../book/book.module';
     UserModule,
     AuthModule,
     BookModule,
+    OrderModule,
   ],
 })
 export class AppModule { }

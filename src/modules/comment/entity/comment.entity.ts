@@ -1,7 +1,7 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
-@Entity({ name: 'book_forms' })
-export class BookForm {
+@Entity({ name: 'comments' })
+export class Comment {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
@@ -9,5 +9,5 @@ export class BookForm {
     title: string;
 
     @Column()
-    description: string;
+    message: string;
 }

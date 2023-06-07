@@ -35,7 +35,7 @@ export class BookService {
         }
     }
 
-    async findById(id: number, exception: boolean = false): Promise<Book> {
+    async findById(id: string, exception: boolean = false): Promise<Book> {
         const book = await this.bookRepository.findOneBy({ id });
         if (exception && !book) {
             throw new NotFoundException(`Invalid FindOne Book With Id ${id}`);
@@ -43,13 +43,13 @@ export class BookService {
         return book;
     }
 
-    async update(id: number, updateDto: UpdateBookDto): Promise<Book> {
+    async update(id: string, updateDto: UpdateBookDto): Promise<Book> {
         const book = await this.findById(id, true);
         Object.assign(book, updateDto);
         return await this.bookRepository.save(book);
     }
 
-    async remove(id: number): Promise<Book> {
+    async remove(id: string): Promise<Book> {
         const book = await this.findById(id, true);
         return await this.bookRepository.remove(book);
     }
