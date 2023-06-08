@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsString, IsEmail, Length, IsArray, IsUUID } from "class-validator";
+import { IsString, IsEmail, Length, IsArray, IsUUID, IsOptional } from "class-validator";
 import { Role } from "../interface/role.interface";
 
 export class BaseUserDto {
@@ -33,4 +33,9 @@ export class BaseUserDto {
     })
     @IsArray()
     roles: Role[];
+
+    @ApiProperty()
+    @IsString()
+    @IsOptional()
+    avatar: string;
 }

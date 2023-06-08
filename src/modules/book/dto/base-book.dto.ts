@@ -1,49 +1,26 @@
-import { IsNumber, IsOptional, IsString, IsUUID, Length, Max, Min } from "class-validator";
-import { Transform } from "class-transformer";
-import { ApiProperty } from "@nestjs/swagger";
+import { IsString, Length } from "class-validator";
+import { ApiProperty, IntersectionType } from "@nestjs/swagger";
+import { BaseProductDto } from "src/modules/product/dto/base-product.dto";
 
-export class BaseBookDto {
-    @ApiProperty()
-    @IsUUID()
-    id: string;
-
+export class BaseBookDto extends IntersectionType(BaseProductDto) {
     @ApiProperty({
-        minLength: 1,
-        maxLength: 26
-    })
-    @IsString()
-    @Length(1, 26)
-    title: string;
-
-    @ApiProperty({
+        description: 'book summary text',
         minLength: 1,
         maxLength: 255
     })
     @IsString()
     @Length(1, 255)
-    description: string;
-
-    @ApiProperty({
-        minimum: 0,
-        maximum: 5000000
-    })
-    @Transform(({ value }) => parseInt(value))
-    @IsNumber()
-    @Min(0)
-    @Max(5000000)
-    price: number;
+    summary: string;
 
     @ApiProperty({
         description: 'book image url'
     })
-    @IsOptional()
     @IsString()
-    cover?: string;
+    cover: string;
 
     @ApiProperty({
-        description: 'book audio summary url'
+        description: 'book audio url'
     })
-    @IsOptional()
     @IsString()
-    summary: string;
+    audio: string;
 }

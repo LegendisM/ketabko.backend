@@ -26,4 +26,7 @@ export class User {
         }
     })
     roles: string[];
+
+    @Column({ nullable: true })
+    avatar?: string;
 }
