@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsEnum, IsString, IsUUID, Length } from "class-validator";
-import { FormItemType } from "../../interface/form-item.interface";
+import { FormItemType } from "../interface/form-item.interface";
 
 export class BaseFormItemDto {
     @ApiProperty()

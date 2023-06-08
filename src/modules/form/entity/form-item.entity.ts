@@ -1,8 +1,8 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 import { FormItemType } from "../interface/form-item.interface";
 
-@Entity({ name: 'book_form_items' })
-export class BookFormItem {
+@Entity({ name: 'form_items' })
+export class FormItem {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
