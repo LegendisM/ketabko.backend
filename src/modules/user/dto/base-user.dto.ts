@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsString, IsEmail, Length, IsArray, IsUUID } from "class-validator";
+import { IsString, IsEmail, Length, IsArray, IsUUID, IsOptional, IsPhoneNumber } from "class-validator";
 import { Role } from "../interface/role.interface";
 
 export class BaseUserDto {
@@ -14,6 +14,10 @@ export class BaseUserDto {
     @IsString()
     @Length(3, 16)
     username: string;
+
+    @ApiProperty()
+    @IsPhoneNumber('IR')
+    phone: string;
 
     @ApiProperty()
     @IsEmail()
@@ -33,4 +37,9 @@ export class BaseUserDto {
     })
     @IsArray()
     roles: Role[];
+
+    @ApiProperty()
+    @IsString()
+    @IsOptional()
+    avatar: string;
 }

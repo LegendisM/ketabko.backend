@@ -1,10 +1,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { CreateBookDto } from '../dto/book/create-book.dto';
-import { Book } from '../entity/book.entity';
+import { CreateBookDto } from './dto/create-book.dto';
+import { Book } from './entity/book.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { UpdateBookDto } from '../dto/book/update-book.dto';
-import { FindBooksDto } from '../dto/book/find-books.dto';
+import { UpdateBookDto } from './dto/update-book.dto';
+import { FindBooksDto } from './dto/find-books.dto';
 import { IPagination } from 'src/common/interface/pagination.interface';
 
 @Injectable()
@@ -18,11 +18,11 @@ export class BookService {
         return await this.bookRepository.save(book);
     }
 
-    async findAll({ title, description, price, limit, page }: FindBooksDto): Promise<IPagination<Book>> {
+    async findAll({ title, description, limit, page }: FindBooksDto): Promise<IPagination<Book>> {
+        // TODO: Complete Search Options
         const books = await this.bookRepository.createQueryBuilder()
-            .where('title LIKE :title', { title }) // TODO
-            .orWhere('description LIKE :description', { description })  // TODO
-            .orWhere('price <= :price', { price })  // TODO
+            .where('title LIKE :title', { title })
+            .orWhere('description LIKE :description', { description })
             .skip((page - 1) * limit)
             .limit(limit - 1)
             .getMany();

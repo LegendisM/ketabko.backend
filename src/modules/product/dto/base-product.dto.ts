@@ -1,18 +1,19 @@
-import { IsNumber, IsOptional, IsString, IsUUID, Length, Max, Min } from "class-validator";
-import { Transform } from "class-transformer";
 import { ApiProperty } from "@nestjs/swagger";
+import { Transform } from "class-transformer";
+import { IsEnum, IsNumber, IsString, IsUUID, Length, Max, Min } from "class-validator";
+import { ProductableType } from "../interface/product.interface";
 
-export class BaseBookDto {
+export class BaseProductDto {
     @ApiProperty()
     @IsUUID()
     id: string;
 
     @ApiProperty({
         minLength: 1,
-        maxLength: 26
+        maxLength: 35
     })
     @IsString()
-    @Length(1, 26)
+    @Length(1, 35)
     title: string;
 
     @ApiProperty({
@@ -34,16 +35,12 @@ export class BaseBookDto {
     price: number;
 
     @ApiProperty({
-        description: 'book image url'
+        enum: ProductableType,
     })
-    @IsOptional()
-    @IsString()
-    cover?: string;
+    @IsEnum(ProductableType)
+    entityType: ProductableType;
 
-    @ApiProperty({
-        description: 'book audio summary url'
-    })
-    @IsOptional()
-    @IsString()
-    summary: string;
+    @ApiProperty()
+    @IsUUID()
+    entityId: string;
 }

@@ -1,7 +1,7 @@
 import slugify from "slugify";
 import { AfterInsert, AfterUpdate, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
-@Entity({ name: 'categories' })
+@Entity()
 export class Category {
     @PrimaryGeneratedColumn('uuid')
     id: string;

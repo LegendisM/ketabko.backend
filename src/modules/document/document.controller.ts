@@ -1,9 +1,9 @@
 import { Controller } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 
-@ApiTags('Comments')
+@ApiTags('Documents')
 @Controller({
-    path: '/comments',
+    path: '/documents',
     version: '1'
 })
-export class CommentController { }
+export class DocumentController { }

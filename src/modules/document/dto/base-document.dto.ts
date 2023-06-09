@@ -1,5 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsString, IsUUID, Length } from "class-validator";
+import { Transform } from "class-transformer";
+import { IsJSON, IsObject, IsString, IsUUID, Length } from "class-validator";
 
 export class BaseDocumentDto {
     @ApiProperty()
@@ -21,4 +22,10 @@ export class BaseDocumentDto {
     @IsString()
     @Length(1, 50)
     description: string;
+
+    @ApiProperty()
+    @IsJSON()
+    @Transform(({ value }) => JSON.parse(value))
+    @IsObject()
+    value: Object;
 }
