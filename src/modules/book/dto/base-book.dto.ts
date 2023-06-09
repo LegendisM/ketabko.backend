@@ -1,8 +1,27 @@
-import { IsString, Length } from "class-validator";
-import { ApiProperty, IntersectionType } from "@nestjs/swagger";
-import { BaseProductDto } from "src/modules/product/dto/base-product.dto";
+import { IsString, IsUUID, Length } from "class-validator";
+import { ApiProperty } from "@nestjs/swagger";
 
-export class BaseBookDto extends IntersectionType(BaseProductDto) {
+export class BaseBookDto {
+    @ApiProperty()
+    @IsUUID()
+    id: string;
+
+    @ApiProperty({
+        minLength: 1,
+        maxLength: 35
+    })
+    @IsString()
+    @Length(1, 35)
+    title: string;
+
+    @ApiProperty({
+        minLength: 1,
+        maxLength: 255
+    })
+    @IsString()
+    @Length(1, 255)
+    description: string;
+
     @ApiProperty({
         description: 'book summary text',
         minLength: 1,

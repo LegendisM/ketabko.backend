@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsEnum, IsString, IsUUID, Length } from "class-validator";
-import { FormItemType } from "../interface/form-item.interface";
+import { FormItemComponent } from "../interface/form-item.interface";
 
 export class BaseFormItemDto {
     @ApiProperty()
@@ -8,10 +8,10 @@ export class BaseFormItemDto {
     id: string;
 
     @ApiProperty({
-        enum: FormItemType
+        enum: FormItemComponent
     })
-    @IsEnum(FormItemType)
-    type: FormItemType;
+    @IsEnum(FormItemComponent)
+    component: FormItemComponent;
 
     @ApiProperty({
         minLength: 1,

@@ -1,4 +1,4 @@
-export enum FormItemType {
+export enum FormItemComponent {
     Text = "text",
     Number = "number",
     Date = "date",

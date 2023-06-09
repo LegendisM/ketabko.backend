@@ -1,6 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Transform } from "class-transformer";
-import { IsNumber, IsString, IsUUID, Length, Max, Min } from "class-validator";
+import { IsEnum, IsNumber, IsString, IsUUID, Length, Max, Min } from "class-validator";
+import { ProductableType } from "../interface/product.interface";
 
 export class BaseProductDto {
     @ApiProperty()
@@ -32,4 +33,14 @@ export class BaseProductDto {
     @Min(0)
     @Max(5000000)
     price: number;
+
+    @ApiProperty({
+        enum: ProductableType,
+    })
+    @IsEnum(ProductableType)
+    entityType: ProductableType;
+
+    @ApiProperty()
+    @IsUUID()
+    entityId: string;
 }

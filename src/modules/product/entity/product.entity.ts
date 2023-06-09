@@ -1,7 +1,8 @@
-import { Column, Entity, PrimaryGeneratedColumn, TableInheritance } from "typeorm";
+import { Order } from "src/modules/order/entity/order.entity";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { ProductableType } from "../interface/product.interface";
 
-@Entity({ name: 'products' })
-@TableInheritance({ column: { type: 'varchar', name: 'type' } })
+@Entity()
 export class Product {
     @PrimaryGeneratedColumn('uuid')
     id: string;
@@ -14,4 +15,17 @@ export class Product {
 
     @Column()
     price: number;
+
+    @Column({
+        type: 'enum',
+        enum: ProductableType,
+        nullable: false
+    })
+    entityType: ProductableType;
+
+    @Column({ type: 'uuid', nullable: false })
+    entityId: string;
+
+    @OneToMany(() => Order, (order) => order.product)
+    orders: Order[];
 }

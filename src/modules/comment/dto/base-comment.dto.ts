@@ -1,5 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsString, IsUUID, Length } from "class-validator";
+import { IsEnum, IsString, IsUUID, Length } from "class-validator";
+import { CommentableType } from "../interface/comment.interface";
 
 export class BaseCommentDto {
     @ApiProperty()
@@ -21,4 +22,14 @@ export class BaseCommentDto {
     @IsString()
     @Length(1, 255)
     message: string;
+
+    @ApiProperty({
+        enum: CommentableType,
+    })
+    @IsEnum(CommentableType)
+    entityType: CommentableType;
+
+    @ApiProperty()
+    @IsUUID()
+    entityId: string;
 }

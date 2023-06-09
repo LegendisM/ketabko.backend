@@ -1,18 +1,22 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
-import { FormItemType } from "../interface/form-item.interface";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { FormItemComponent } from "../interface/form-item.interface";
+import { Form } from "./form.entity";
 
-@Entity({ name: 'form_items' })
+@Entity()
 export class FormItem {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
     @Column({
         type: 'enum',
-        enum: FormItemType,
-        default: FormItemType.Text
+        enum: FormItemComponent,
+        default: FormItemComponent.Text
     })
-    type: string;
+    component: FormItemComponent;
 
     @Column()
     helper: string;
+
+    @ManyToOne(() => Form, (form) => form.items, { onDelete: 'CASCADE' })
+    form: Form;
 }

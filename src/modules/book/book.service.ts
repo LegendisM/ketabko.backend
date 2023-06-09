@@ -18,12 +18,11 @@ export class BookService {
         return await this.bookRepository.save(book);
     }
 
-    async findAll({ title, description, price, limit, page }: FindBooksDto): Promise<IPagination<Book>> {
+    async findAll({ title, description, limit, page }: FindBooksDto): Promise<IPagination<Book>> {
         // TODO: Complete Search Options
         const books = await this.bookRepository.createQueryBuilder()
             .where('title LIKE :title', { title })
             .orWhere('description LIKE :description', { description })
-            .orWhere('price <= :price', { price })
             .skip((page - 1) * limit)
             .limit(limit - 1)
             .getMany();

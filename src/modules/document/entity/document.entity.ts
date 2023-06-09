@@ -1,6 +1,8 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Form } from "src/modules/form/entity/form.entity";
+import { User } from "src/modules/user/entity/user.entity";
+import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
-@Entity({ name: 'documents' })
+@Entity()
 export class Document {
     @PrimaryGeneratedColumn('uuid')
     id: string;
@@ -11,6 +13,21 @@ export class Document {
     @Column()
     description: string;
 
+    @Column({
+        type: 'simple-json',
+        transformer: {
+            from: (value) => JSON.parse(value),
+            to: (value) => JSON.stringify(value)
+        }
+    })
+    value: Object;
+
     @CreateDateColumn()
     createdAt: Date;
+
+    @ManyToOne(() => User, (user) => user.documents, { onDelete: 'CASCADE' })
+    user: User;
+
+    @ManyToOne(() => Form, (form) => form.documents, { onDelete: 'CASCADE' })
+    form: Form;
 }

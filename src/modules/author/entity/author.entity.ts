@@ -1,6 +1,7 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Book } from "src/modules/book/entity/book.entity";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
-@Entity({ name: 'authors' })
+@Entity()
 export class Author {
     @PrimaryGeneratedColumn('uuid')
     id: string;
@@ -13,4 +14,7 @@ export class Author {
 
     @Column()
     avatar: string;
+
+    @OneToMany(() => Book, (book) => book.author)
+    books: Book[];
 }
