@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsOptional, IsString, IsUUID, Length } from "class-validator";
+import { IsString, IsUUID, Length } from "class-validator";
 
 export class BaseAuthorDto {
     @ApiProperty()
@@ -7,7 +7,7 @@ export class BaseAuthorDto {
     id: string;
 
     @ApiProperty({
-        description: 'author name',
+        description: 'Author Name',
         minLength: 1,
         maxLength: 30
     })
@@ -16,7 +16,7 @@ export class BaseAuthorDto {
     name: string;
 
     @ApiProperty({
-        description: 'author about text',
+        description: 'Author About Text',
         minLength: 1,
         maxLength: 255
     })
@@ -24,8 +24,9 @@ export class BaseAuthorDto {
     @Length(1, 255)
     description: string;
 
-    @ApiProperty()
-    @IsString()
-    @IsOptional()
-    avatar?: string;
+    @ApiProperty({
+        description: 'UUID Of the StorageFile for Avatar Image'
+    })
+    @IsUUID()
+    avatar: string;
 }

@@ -1,9 +1,9 @@
 import { Controller } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 
-@ApiTags('Forms')
+@ApiTags('Storages')
 @Controller({
-    path: '/forms',
+    path: '/storages',
     version: '1'
 })
-export class FormController { }
+export class StorageController { }

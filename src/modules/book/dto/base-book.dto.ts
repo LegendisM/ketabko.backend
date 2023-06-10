@@ -23,23 +23,23 @@ export class BaseBookDto {
     description: string;
 
     @ApiProperty({
-        description: 'book summary text',
+        description: 'Book Summary Text',
         minLength: 1,
-        maxLength: 255
+        maxLength: 1024
     })
     @IsString()
-    @Length(1, 255)
+    @Length(1, 1024)
     summary: string;
 
     @ApiProperty({
-        description: 'book image url'
+        description: 'UUID Of the StorageFile for Cover Image'
     })
-    @IsString()
+    @IsUUID()
     cover: string;
 
     @ApiProperty({
-        description: 'book audio url'
+        description: 'UUID Of the StorageFile for Audio File'
     })
-    @IsString()
+    @IsUUID()
     audio: string;
 }

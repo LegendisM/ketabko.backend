@@ -12,4 +12,6 @@ export class BaseOrderDto {
     })
     @IsEnum(OrderStatus)
     status: OrderStatus;
+
+    // TODO: ORDER SYSTEM
 }

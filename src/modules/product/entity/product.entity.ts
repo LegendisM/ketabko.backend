@@ -1,6 +1,7 @@
 import { Order } from "src/modules/order/entity/order.entity";
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { ProductableType } from "../interface/product.interface";
+import { StorageFile } from "src/modules/storage/entity/storage-file.entity";
 
 @Entity()
 export class Product {
@@ -15,6 +16,10 @@ export class Product {
 
     @Column()
     price: number;
+
+    @OneToOne(() => StorageFile, (storageFile) => storageFile.id)
+    @JoinColumn()
+    cover: StorageFile;
 
     @Column({
         type: 'enum',

@@ -1,8 +1,8 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Role } from "../interface/role.interface";
 import { Order } from "src/modules/order/entity/order.entity";
 import { Comment } from "src/modules/comment/entity/comment.entity";
-import { Document } from "src/modules/document/entity/document.entity";
+import { StorageFile } from "src/modules/storage/entity/storage-file.entity";
 
 @Entity()
 export class User {
@@ -30,8 +30,9 @@ export class User {
     })
     roles: Role[];
 
-    @Column({ nullable: true })
-    avatar?: string;
+    @OneToOne(() => StorageFile, (storageFile) => storageFile.id)
+    @JoinColumn()
+    avatar: StorageFile;
 
     @OneToMany(() => Order, (order) => order.user)
     orders: Order[];
@@ -39,6 +40,6 @@ export class User {
     @OneToMany(() => Comment, (comment) => comment.user)
     comments: Comment[];
 
-    @OneToMany(() => Document, (document) => document.user)
-    documents: Document[];
+    @OneToMany(() => StorageFile, (storageFile) => storageFile.user)
+    files: StorageFile[];
 }

@@ -43,4 +43,10 @@ export class BaseProductDto {
     @ApiProperty()
     @IsUUID()
     entityId: string;
+
+    @ApiProperty({
+        description: 'UUID Of the StorageFile for Cover Image'
+    })
+    @IsUUID()
+    cover: string;
 }
