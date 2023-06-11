@@ -1,7 +1,8 @@
 import { Author } from "src/modules/author/entity/author.entity";
 import { Category } from "src/modules/category/entity/category.entity";
-import { Form } from "src/modules/form/entity/form.entity";
-import { Column, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { StorageFile } from "src/modules/storage/entity/storage-file.entity";
+import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { BookSection } from "./book-section.entity";
 
 @Entity()
 export class Book {
@@ -14,17 +15,16 @@ export class Book {
     @Column()
     description: string;
 
-    @Column()
-    summary: string;
+    @OneToOne(() => StorageFile, (storageFile) => storageFile.id, { onDelete: 'SET NULL' })
+    @JoinColumn()
+    cover: StorageFile;
 
-    @Column()
-    cover: string;
+    @OneToOne(() => StorageFile, (storageFile) => storageFile.id, { onDelete: 'SET NULL' })
+    @JoinColumn()
+    audio: StorageFile;
 
-    @Column()
-    audio: string;
-
-    @OneToMany(() => Form, (form) => form.book)
-    forms: Form[];
+    @OneToMany(() => BookSection, (bookSection) => bookSection.book)
+    sections: BookSection[];
 
     @ManyToOne(() => Author, (author) => author.books, { onDelete: 'CASCADE' })
     author: Author;

@@ -13,12 +13,4 @@ export class BaseCategoryDto {
     @IsString()
     @Length(1, 30)
     name: string;
-
-    @ApiProperty({
-        minLength: 1,
-        maxLength: 60
-    })
-    @IsString()
-    @Length(1, 60)
-    slug: string;
 }

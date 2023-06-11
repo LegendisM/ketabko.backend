@@ -2,11 +2,16 @@ import path from 'path';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserModule } from '../user/user.module';
 import { HeaderResolver, I18nModule } from 'nestjs-i18n';
+import { UserModule } from '../user/user.module';
 import { AuthModule } from '../auth/auth.module';
-import { BookModule } from '../book/book.module';
+import { StorageModule } from '../storage/storage.module';
+import { ProductModule } from '../product/product.module';
 import { OrderModule } from '../order/order.module';
+import { BookModule } from '../book/book.module';
+import { CategoryModule } from '../category/category.module';
+import { CommentModule } from '../comment/comment.module';
+import { AuthorModule } from '../author/author.module';
 
 @Module({
   imports: [
@@ -36,8 +41,13 @@ import { OrderModule } from '../order/order.module';
     }),
     UserModule,
     AuthModule,
-    BookModule,
+    StorageModule,
+    ProductModule,
     OrderModule,
+    AuthorModule,
+    BookModule,
+    CategoryModule,
+    CommentModule
   ],
 })
 export class AppModule { }

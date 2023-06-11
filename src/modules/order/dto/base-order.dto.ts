@@ -8,8 +8,15 @@ export class BaseOrderDto {
     id: string;
 
     @ApiProperty({
-        enum: OrderStatus
+        enum: OrderStatus,
+        default: OrderStatus.Pending
     })
     @IsEnum(OrderStatus)
     status: OrderStatus;
+
+    @ApiProperty({
+        description: 'UUID Of the Product'
+    })
+    @IsUUID()
+    product: string;
 }

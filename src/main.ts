@@ -1,11 +1,11 @@
 import path from "path";
 import helmet from "helmet";
 import compression from "compression";
-import { NestFactory } from '@nestjs/core';
+import { NestFactory, Reflector } from '@nestjs/core';
 import { AppModule } from './modules/app/app.module';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { ConfigService } from '@nestjs/config';
-import { ValidationPipe, VersioningType } from '@nestjs/common';
+import { ClassSerializerInterceptor, ValidationPipe, VersioningType } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 
 async function bootstrap() {
@@ -19,6 +19,7 @@ async function bootstrap() {
   app.setGlobalPrefix('/api');
   app.enableVersioning({ type: VersioningType.URI });
   app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true }));
+  app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
 
   // * middlewares
   app.use(compression());
