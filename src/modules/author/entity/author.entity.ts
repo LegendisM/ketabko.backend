@@ -13,7 +13,7 @@ export class Author {
     @Column({ type: 'text' })
     description: string;
 
-    @OneToOne(() => StorageFile, (storageFile) => storageFile.id)
+    @OneToOne(() => StorageFile, (storageFile) => storageFile.id, { onDelete: 'SET NULL' })
     @JoinColumn()
     avatar: StorageFile;
 

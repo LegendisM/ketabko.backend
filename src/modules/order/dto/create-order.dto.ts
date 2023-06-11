@@ -1,4 +1,7 @@
+import { PickType } from "@nestjs/swagger";
+import { BaseOrderDto } from "./base-order.dto";
 
-export class CreateOrderDto { 
-    // TODO: ORDER SYSTEM
-}
+export class CreateOrderDto extends PickType(
+    BaseOrderDto,
+    ['product']
+) { }

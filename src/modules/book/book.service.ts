@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateBookDto } from './dto/create-book.dto';
 import { Book } from './entity/book.entity';
@@ -14,7 +15,10 @@ export class BookService {
     ) { }
 
     async create(createDto: CreateBookDto): Promise<Book> {
-        const book = await this.bookRepository.create(createDto);
+        const book = this.bookRepository.create(_.omit(createDto, ['cover', 'audio']));
+        // TODO: find storages files with ids in createDto and give these to book for save
+        book.cover;
+        book.audio;
         return await this.bookRepository.save(book);
     }
 
@@ -24,7 +28,7 @@ export class BookService {
             .where('title LIKE :title', { title })
             .orWhere('description LIKE :description', { description })
             .skip((page - 1) * limit)
-            .limit(limit - 1)
+            .take(limit - 1)
             .getMany();
         const booksCount = await this.bookRepository.count();
         return {

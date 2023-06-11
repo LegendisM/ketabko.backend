@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsString, IsEmail, Length, IsArray, IsUUID, IsPhoneNumber } from "class-validator";
+import { IsString, IsEmail, Length, IsArray, IsUUID, IsPhoneNumber, IsNumber, Min, Max } from "class-validator";
 import { Role } from "../interface/role.interface";
 
 export class BaseUserDto {
@@ -30,6 +30,15 @@ export class BaseUserDto {
     @IsString()
     @Length(4, 18)
     password: string;
+
+    @ApiProperty({
+        minimum: 0,
+        maximum: 10000
+    })
+    @IsNumber()
+    @Min(0)
+    @Max(10000)
+    level: number;
 
     @ApiProperty({
         enum: Role,

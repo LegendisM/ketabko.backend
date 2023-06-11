@@ -3,5 +3,5 @@ import { BaseBookDto } from "./base-book.dto";
 
 export class CreateBookDto extends PickType(
     BaseBookDto,
-    ['title', 'description', 'summary', 'cover', 'audio']
+    ['title', 'description', 'cover', 'audio']
 ) { }

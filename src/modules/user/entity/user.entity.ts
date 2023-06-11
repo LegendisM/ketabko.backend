@@ -3,6 +3,7 @@ import { Role } from "../interface/role.interface";
 import { Order } from "src/modules/order/entity/order.entity";
 import { Comment } from "src/modules/comment/entity/comment.entity";
 import { StorageFile } from "src/modules/storage/entity/storage-file.entity";
+import { Exclude } from "class-transformer";
 
 @Entity()
 export class User {
@@ -19,7 +20,11 @@ export class User {
     email: string;
 
     @Column()
+    @Exclude()
     password: string;
+
+    @Column({ default: 0 })
+    level: number;
 
     @Column('simple-array', {
         default: [Role.User],
@@ -30,7 +35,7 @@ export class User {
     })
     roles: Role[];
 
-    @OneToOne(() => StorageFile, (storageFile) => storageFile.id)
+    @OneToOne(() => StorageFile, (storageFile) => storageFile.id, { onDelete: 'SET NULL' })
     @JoinColumn()
     avatar: StorageFile;
 

@@ -17,7 +17,7 @@ export class Product {
     @Column()
     price: number;
 
-    @OneToOne(() => StorageFile, (storageFile) => storageFile.id)
+    @OneToOne(() => StorageFile, (storageFile) => storageFile.id, { onDelete: 'SET NULL' })
     @JoinColumn()
     cover: StorageFile;
 
