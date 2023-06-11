@@ -35,7 +35,7 @@ export class User {
     })
     roles: Role[];
 
-    @OneToOne(() => StorageFile, (storageFile) => storageFile.id, { onDelete: 'SET NULL' })
+    @OneToOne(() => StorageFile, (storageFile) => storageFile.id, { eager: true, onDelete: 'SET NULL' })
     @JoinColumn()
     avatar: StorageFile;
 

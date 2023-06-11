@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Put, Delete, Param, Body, Query } from '@nestjs/common';
 import { BookService } from './book.service';
 import { ApiTags } from '@nestjs/swagger';
-import { FindBooksDto } from './dto/find-books.dto';
+import { FindBooksDto } from './dto/find-book.dto';
 import { IPagination } from 'src/common/interface/pagination.interface';
 import { Book } from './entity/book.entity';
 import { CreateBookDto } from './dto/create-book.dto';
@@ -24,14 +24,19 @@ export class BookController {
         return await this.bookService.findAll(findDto);
     }
 
-    @Roles(Role.Admin)
+    @Get('/:id')
+    async getBookById(@Param('id') id: string): Promise<Book> {
+        return await this.bookService.findById(id, true);
+    }
+
     @Post('/')
+    @Roles(Role.Admin)
     async createBook(@Body() createDto: CreateBookDto): Promise<Book> {
         return await this.bookService.create(createDto);
     }
 
-    @Roles(Role.Admin)
     @Put('/:id')
+    @Roles(Role.Admin)
     async updateBook(
         @Param('id') id: string,
         @Body() updateDto: UpdateBookDto
@@ -39,8 +44,8 @@ export class BookController {
         await this.bookService.update(id, updateDto);
     }
 
-    @Roles(Role.Admin)
     @Delete('/:id')
+    @Roles(Role.Admin)
     async removeBook(@Param('id') id: string) {
         await this.bookService.remove(id);
     }

@@ -4,3 +4,7 @@ export enum OrderStatus {
     Fail = "fail",
     Complete = "complete",
 }
+
+export enum OrderableType {
+    Book = 'book'
+}

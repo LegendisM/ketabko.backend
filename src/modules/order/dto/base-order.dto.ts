@@ -1,11 +1,15 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsEnum, IsUUID } from "class-validator";
-import { OrderStatus } from "../interface/order.interface";
+import { IsEnum, IsString, IsUUID } from "class-validator";
+import { OrderStatus, OrderableType } from "../interface/order.interface";
 
 export class BaseOrderDto {
     @ApiProperty()
     @IsUUID()
     id: string;
+
+    @ApiProperty()
+    @IsString()
+    note: string;
 
     @ApiProperty({
         enum: OrderStatus,
@@ -15,8 +19,16 @@ export class BaseOrderDto {
     status: OrderStatus;
 
     @ApiProperty({
-        description: 'UUID Of the Product'
+        enum: OrderableType,
+        default: OrderableType.Book,
+        description: 'Type Of the Entity',
+    })
+    @IsEnum(OrderableType)
+    entityType: OrderableType;
+
+    @ApiProperty({
+        description: 'UUID Of the Entity'
     })
     @IsUUID()
-    product: string;
+    entityId: string;
 }

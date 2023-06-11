@@ -15,21 +15,24 @@ export class Book {
     @Column()
     description: string;
 
-    @OneToOne(() => StorageFile, (storageFile) => storageFile.id, { onDelete: 'SET NULL' })
+    @Column()
+    price: number;
+
+    @OneToOne(() => StorageFile, (storageFile) => storageFile.id, { eager: true, onDelete: 'SET NULL' })
     @JoinColumn()
     cover: StorageFile;
 
-    @OneToOne(() => StorageFile, (storageFile) => storageFile.id, { onDelete: 'SET NULL' })
+    @OneToOne(() => StorageFile, (storageFile) => storageFile.id, { eager: true, onDelete: 'SET NULL' })
     @JoinColumn()
     audio: StorageFile;
 
-    @OneToMany(() => BookSection, (bookSection) => bookSection.book)
+    @OneToMany(() => BookSection, (bookSection) => bookSection.book, { eager: true })
     sections: BookSection[];
 
-    @ManyToOne(() => Author, (author) => author.books, { onDelete: 'CASCADE' })
+    @ManyToOne(() => Author, (author) => author.books, { eager: true, onDelete: 'CASCADE' })
     author: Author;
 
-    @ManyToMany(() => Category)
+    @ManyToMany(() => Category, { eager: true })
     @JoinTable()
     categories: Category[];
 }

@@ -6,7 +6,6 @@ import { HeaderResolver, I18nModule } from 'nestjs-i18n';
 import { UserModule } from '../user/user.module';
 import { AuthModule } from '../auth/auth.module';
 import { StorageModule } from '../storage/storage.module';
-import { ProductModule } from '../product/product.module';
 import { OrderModule } from '../order/order.module';
 import { BookModule } from '../book/book.module';
 import { CategoryModule } from '../category/category.module';
@@ -42,7 +41,6 @@ import { AuthorModule } from '../author/author.module';
     UserModule,
     AuthModule,
     StorageModule,
-    ProductModule,
     OrderModule,
     AuthorModule,
     BookModule,

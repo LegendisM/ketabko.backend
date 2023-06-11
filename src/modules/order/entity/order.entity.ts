@@ -1,12 +1,14 @@
 import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { OrderStatus } from "../interface/order.interface";
+import { OrderStatus, OrderableType } from "../interface/order.interface";
 import { User } from "src/modules/user/entity/user.entity";
-import { Product } from "src/modules/product/entity/product.entity";
 
 @Entity()
 export class Order {
     @PrimaryGeneratedColumn('uuid')
     id: string;
+
+    @Column({ default: '' })
+    note: string;
 
     @Column({
         type: 'enum',
@@ -15,12 +17,19 @@ export class Order {
     })
     status: OrderStatus;
 
+    @Column({
+        type: 'enum',
+        enum: OrderableType,
+        nullable: false
+    })
+    entityType: OrderableType;
+
+    @Column({ type: 'uuid', nullable: false })
+    entityId: string;
+
     @CreateDateColumn()
     createdAt: Date;
 
     @ManyToOne(() => User, (user) => user.orders, { onDelete: 'CASCADE' })
     user: User;
-
-    @ManyToOne(() => Product, (product) => product.orders, { onDelete: 'CASCADE' })
-    product: Product;
 }
