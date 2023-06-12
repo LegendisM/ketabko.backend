@@ -1,4 +1,4 @@
-import _, { min } from 'lodash';
+import _ from 'lodash';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateBookDto } from './dto/create-book.dto';
 import { Book } from './entity/book.entity';
