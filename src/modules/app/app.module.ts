@@ -11,6 +11,7 @@ import { BookModule } from '../book/book.module';
 import { CategoryModule } from '../category/category.module';
 import { CommentModule } from '../comment/comment.module';
 import { AuthorModule } from '../author/author.module';
+import { PolicyModule } from '../policy/policy.module';
 
 @Module({
   imports: [
@@ -40,6 +41,7 @@ import { AuthorModule } from '../author/author.module';
     }),
     UserModule,
     AuthModule,
+    PolicyModule,
     StorageModule,
     OrderModule,
     AuthorModule,

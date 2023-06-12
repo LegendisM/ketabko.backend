@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
+import { Body, Controller, Delete, ForbiddenException, Get, Param, Post, Put, Query } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { OrderService } from './order.service';
 import { IPagination } from 'src/common/interface/pagination.interface';
@@ -9,6 +9,8 @@ import { PaginationDto } from 'src/common/dto/pagination.dto';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { CurrentUser } from '../user/decorator/user.decorator';
 import { User } from '../user/entity/user.entity';
+import { PolicyService } from '../policy/policy.service';
+import { PolicyAction } from '../policy/interface/policy.interface';
 
 @ApiTags('Orders')
 @Controller({
@@ -17,7 +19,8 @@ import { User } from '../user/entity/user.entity';
 })
 export class OrderController {
     constructor(
-        private orderService: OrderService
+        private orderService: OrderService,
+        private policyService: PolicyService
     ) { }
 
     @Get('/')
@@ -32,9 +35,13 @@ export class OrderController {
     }
 
     @Get('/:id')
-    async getOrderById(@Param('id') id: string) {
-        // TODO: Policy Check
-        return await this.orderService.findById(id, true);
+    async getOrderById(
+        @Param('id') id: string,
+        @CurrentUser() user: User
+    ): Promise<Order> {
+        const order = await this.orderService.findById(id, true);
+        this.policyService.forOrder(PolicyAction.Read, user, order, true);
+        return order;
     }
 
     @Post('/')
@@ -46,8 +53,13 @@ export class OrderController {
     }
 
     @Put('/:id')
-    async updateOrder() {
-        // TODO: Policy Check
+    async updateOrder(
+        @Param('id') id: string,
+        @CurrentUser() user: User
+    ) {
+        const order = await this.orderService.findById(id, true);
+        this.policyService.forOrder(PolicyAction.Update, user, order, true);
+        // this.orderService.update();
         // TODO: handle to complete or fail order
     }
 
