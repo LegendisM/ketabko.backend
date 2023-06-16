@@ -25,11 +25,15 @@ export class BaseCommentDto {
 
     @ApiProperty({
         enum: CommentableType,
+        default: CommentableType.Book,
+        description: 'Type Of the Entity'
     })
     @IsEnum(CommentableType)
     entityType: CommentableType;
 
-    @ApiProperty()
+    @ApiProperty({
+        description: 'UUID Of the Entity'
+    })
     @IsUUID()
     entityId: string;
 }

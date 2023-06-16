@@ -19,7 +19,7 @@ export class OrderService {
     async create({ entityId, entityType }: CreateOrderDto, user: User): Promise<Order> {
         await this.validateEntity(entityType, entityId, true);
         await this.preventDuplicate(entityType, entityId, user);
-        const order = await this.orderRepository.create({ entityId, entityType });
+        const order = await this.orderRepository.create({ entityId, entityType, user });
         return await this.orderRepository.save(order);
     }
 
