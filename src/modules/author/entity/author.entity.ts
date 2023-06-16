@@ -17,6 +17,6 @@ export class Author {
     @JoinColumn()
     avatar: StorageFile;
 
-    @OneToMany(() => Book, (book) => book.author, { eager: true })
+    @OneToMany(() => Book, (book) => book.author)
     books: Book[];
 }

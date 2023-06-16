@@ -7,6 +7,8 @@ import { Comment } from './entity/comment.entity';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { CurrentUser } from '../user/decorator/user.decorator';
 import { User } from '../user/entity/user.entity';
+import { PolicyService } from '../policy/policy.service';
+import { PolicyAction } from '../policy/interface/policy.interface';
 
 @ApiTags('Comments')
 @Controller({
@@ -15,12 +17,18 @@ import { User } from '../user/entity/user.entity';
 })
 export class CommentController {
     constructor(
-        private commentService: CommentService
+        private commentService: CommentService,
+        private policyService: PolicyService
     ) { }
 
     @Get('/')
     async getComments(@Query() findDto: FindCommentsDto): Promise<IPagination<Comment>> {
         return await this.commentService.findAll(findDto);
+    }
+
+    @Get('/:id')
+    async getCommentById(@Param('id') id: string): Promise<Comment> {
+        return await this.commentService.findById(id, true);
     }
 
     @Post('/')
@@ -32,7 +40,9 @@ export class CommentController {
     }
 
     @Delete('/:id')
-    async removeComment(@Param('id') id: string) {
+    async removeComment(@Param('id') id: string, @CurrentUser() user: User) {
+        const comment = await this.commentService.findById(id, true);
+        this.policyService.forComment(PolicyAction.Delete, user, comment, true);
         return await this.commentService.remove(id);
     }
 }
