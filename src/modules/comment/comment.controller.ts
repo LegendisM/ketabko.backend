@@ -9,6 +9,7 @@ import { CurrentUser } from '../user/decorator/user.decorator';
 import { User } from '../user/entity/user.entity';
 import { PolicyService } from '../policy/policy.service';
 import { PolicyAction } from '../policy/interface/policy.interface';
+import { Auth } from '../auth/decorator/auth.decorator';
 
 @ApiTags('Comments')
 @Controller({
@@ -32,6 +33,7 @@ export class CommentController {
     }
 
     @Post('/')
+    @Auth()
     async createComment(
         @Body() createDto: CreateCommentDto,
         @CurrentUser() user: User
@@ -40,6 +42,7 @@ export class CommentController {
     }
 
     @Delete('/:id')
+    @Auth()
     async removeComment(@Param('id') id: string, @CurrentUser() user: User) {
         const comment = await this.commentService.findById(id, true);
         this.policyService.forComment(PolicyAction.Delete, user, comment, true);

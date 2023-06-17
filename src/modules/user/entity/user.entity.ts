@@ -4,6 +4,7 @@ import { Order } from "src/modules/order/entity/order.entity";
 import { Comment } from "src/modules/comment/entity/comment.entity";
 import { StorageFile } from "src/modules/storage/entity/storage-file.entity";
 import { Exclude } from "class-transformer";
+import { Payment } from "src/modules/payment/entity/payment.entity";
 
 @Entity()
 export class User {
@@ -47,4 +48,7 @@ export class User {
 
     @OneToMany(() => StorageFile, (storageFile) => storageFile.user)
     files: StorageFile[];
+
+    @OneToMany(() => Payment, (payment) => payment.user)
+    payments: Payment[];
 }

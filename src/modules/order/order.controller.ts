@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, ForbiddenException, Get, Param, Post, Put, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Query } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { OrderService } from './order.service';
 import { IPagination } from 'src/common/interface/pagination.interface';
@@ -11,12 +11,14 @@ import { CurrentUser } from '../user/decorator/user.decorator';
 import { User } from '../user/entity/user.entity';
 import { PolicyService } from '../policy/policy.service';
 import { PolicyAction } from '../policy/interface/policy.interface';
+import { Auth } from '../auth/decorator/auth.decorator';
 
 @ApiTags('Orders')
 @Controller({
     path: '/orders',
     version: '1'
 })
+@Auth()
 export class OrderController {
     constructor(
         private orderService: OrderService,
@@ -52,16 +54,17 @@ export class OrderController {
         return await this.orderService.create(createDto, user);
     }
 
-    @Put('/:id')
-    async updateOrder(
-        @Param('id') id: string,
-        @CurrentUser() user: User
-    ) {
-        const order = await this.orderService.findById(id, true);
-        this.policyService.forOrder(PolicyAction.Update, user, order, true);
-        // this.orderService.update();
-        // TODO: handle to complete or fail order
-    }
+    // TODO
+    // @Put('/:id')
+    // async updateOrder(
+    //     @Param('id') id: string,
+    //     @CurrentUser() user: User
+    // ) {
+    //     const order = await this.orderService.findById(id, true);
+    //     this.policyService.forOrder(PolicyAction.Update, user, order, true);
+    //     // this.orderService.update();
+    //     // TODO: handle to complete or fail order
+    // }
 
     @Delete('/:id')
     @Roles(Role.Admin)

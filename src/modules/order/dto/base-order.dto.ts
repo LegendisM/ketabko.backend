@@ -1,15 +1,11 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsEnum, IsString, IsUUID } from "class-validator";
+import { IsEnum, IsUUID } from "class-validator";
 import { OrderStatus, OrderableType } from "../interface/order.interface";
 
 export class BaseOrderDto {
     @ApiProperty()
     @IsUUID()
     id: string;
-
-    @ApiProperty()
-    @IsString()
-    note: string;
 
     @ApiProperty({
         enum: OrderStatus,
