@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Put, Delete, Param, Body, Query } from '@nestjs/common';
 import { BookService } from './book.service';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiCreatedResponse, ApiNotFoundResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { FindBooksDto } from './dto/find-book.dto';
 import { IPagination } from 'src/common/interface/pagination.interface';
 import { Book } from './entity/book.entity';
@@ -20,23 +20,44 @@ export class BookController {
     ) { }
 
     @Get('/')
+    @ApiOkResponse({
+        description: 'Receive Array Of Books with Paginate'
+    })
     async getBooks(@Query() findDto: FindBooksDto): Promise<IPagination<Book>> {
         return await this.bookService.findAll(findDto);
     }
 
     @Get('/:id')
+    @ApiOkResponse({
+        description: 'Receive Book Instance'
+    })
+    @ApiNotFoundResponse({
+        description: 'Book Not Found'
+    })
     async getBookById(@Param('id') id: string): Promise<Book> {
         return await this.bookService.findById(id, true);
     }
 
     @Post('/')
     @Roles(Role.Admin)
+    @ApiCreatedResponse({
+        description: 'Book Created Successfully'
+    })
+    @ApiNotFoundResponse({
+        description: 'Cover|Audio StorageFile Not Found'
+    })
     async createBook(@Body() createDto: CreateBookDto): Promise<Book> {
         return await this.bookService.create(createDto);
     }
 
     @Put('/:id')
     @Roles(Role.Admin)
+    @ApiOkResponse({
+        description: 'Book Updated Successfully'
+    })
+    @ApiNotFoundResponse({
+        description: 'Book|Cover|Audio Not Found'
+    })
     async updateBook(
         @Param('id') id: string,
         @Body() updateDto: UpdateBookDto
@@ -46,6 +67,12 @@ export class BookController {
 
     @Delete('/:id')
     @Roles(Role.Admin)
+    @ApiOkResponse({
+        description: 'Book Deleted Successfully'
+    })
+    @ApiNotFoundResponse({
+        description: 'Book Not Found'
+    })
     async removeBook(@Param('id') id: string) {
         await this.bookService.remove(id);
     }

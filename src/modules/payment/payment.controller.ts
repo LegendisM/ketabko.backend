@@ -14,7 +14,9 @@ import { PolicyService } from '../policy/policy.service';
 import { PolicyAction } from '../policy/interface/policy.interface';
 import { PaymentDriverType } from './interface/payment-driver.interface';
 import _ from 'lodash';
+import { ApiConflictResponse, ApiCreatedResponse, ApiForbiddenResponse, ApiNotFoundResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Payments')
 @Controller({
     path: '/payments',
     version: '1'
@@ -29,16 +31,34 @@ export class PaymentController {
 
     @Get('/')
     @Roles(Role.Admin)
+    @ApiOkResponse({
+        description: 'Receive Array Of Payments With Paginate'
+    })
     async getAllPayments(@Query() findDto: FindPaymentsDto): Promise<IPagination<Payment>> {
         return await this.paymentService.findAll(findDto);
     }
 
     @Get('/me')
+    @ApiOkResponse({
+        description: 'Receive Array Of User Payments'
+    })
     async getUserPayments(@CurrentUser() user: User): Promise<Payment[]> {
         return await this.paymentService.findAllByUser(user);
     }
 
     @Get('/pay/:id')
+    @ApiOkResponse({
+        description: 'Payment Started Successfully'
+    })
+    @ApiNotFoundResponse({
+        description: 'Payment Not Found'
+    })
+    @ApiForbiddenResponse({
+        description: 'Invalid User Policy Access'
+    })
+    @ApiConflictResponse({
+        description: 'Invalid Payment Stauts | Invalid Payment Driver Actions'
+    })
     async startPayment(
         @Param('id') id: string,
         @CurrentUser() user: User
@@ -49,6 +69,15 @@ export class PaymentController {
     }
 
     @Get('/callback/:driver')
+    @ApiOkResponse({
+        description: 'Payment Result'
+    })
+    @ApiNotFoundResponse({
+        description: 'Payment Driver Not Found'
+    })
+    @ApiConflictResponse({
+        description: 'Payment Operation Failed'
+    })
     async onPaymentCallback(
         @Param('driver') driver: PaymentDriverType,
         @Param() data: Record<string, string>
@@ -58,6 +87,15 @@ export class PaymentController {
     }
 
     @Post('/')
+    @ApiCreatedResponse({
+        description: 'Payment Created Successfully'
+    })
+    @ApiNotFoundResponse({
+        description: 'Order Not Found'
+    })
+    @ApiConflictResponse({
+        description: 'Payment Already Exist For Order'
+    })
     async createPayment(
         @Body() createDto: CreatePaymentDto,
         @CurrentUser() user: User
@@ -67,6 +105,12 @@ export class PaymentController {
 
     @Delete('/:id')
     @Roles(Role.Admin)
+    @ApiOkResponse({
+        description: 'Payment Removed Successfully'
+    })
+    @ApiNotFoundResponse({
+        description: 'Payment Not Found'
+    })
     async removePayment(@Param('id') id: string) {
         await this.paymentService.remove(id);
     }

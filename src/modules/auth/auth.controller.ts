@@ -1,5 +1,5 @@
 import { Controller, Post, Body, HttpCode, HttpStatus } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { AuthDto } from './dto/auth.dto';
 import { I18n, I18nContext } from 'nestjs-i18n';
@@ -17,6 +17,9 @@ export class AuthController {
 
     @Post('/signup')
     @HttpCode(HttpStatus.OK)
+    @ApiOkResponse({
+        description: 'Receive AuthResult Object'
+    })
     async signup(
         @Body() authDto: AuthDto,
         @I18n() i18n: I18nContext
@@ -31,6 +34,9 @@ export class AuthController {
 
     @Post('/signin')
     @HttpCode(HttpStatus.OK)
+    @ApiOkResponse({
+        description: 'Receive AuthResult Object'
+    })
     async signin(
         @Body() authDto: AuthDto,
         @I18n() i18n: I18nContext
