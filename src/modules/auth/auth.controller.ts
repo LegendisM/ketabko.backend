@@ -25,7 +25,7 @@ export class AuthController {
         return {
             state,
             token,
-            message: i18n.t(`auth.${message}`)
+            message: i18n.t(message)
         };
     }
 
@@ -39,7 +39,7 @@ export class AuthController {
         return {
             state,
             token,
-            message: i18n.t(`auth.${message}`)
+            message: i18n.t(message)
         };
     }
 }

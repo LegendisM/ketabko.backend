@@ -20,7 +20,7 @@ export class UserService {
     async findOne(filter: FindOptionsWhere<User>, exception: boolean = false): Promise<User> {
         const user = await this.userRepository.findOne({ where: filter });
         if (exception && !user) {
-            throw new NotFoundException('Invalid FindOne User With This Filter');
+            throw new NotFoundException('user.invalid-findone');
         }
         return user;
     }
@@ -28,7 +28,7 @@ export class UserService {
     async findById(id: string, exception: boolean = false): Promise<User> {
         const user = await this.userRepository.findOneBy({ id });
         if (exception && !user) {
-            throw new NotFoundException(`Invalid FindOne User With Id ${id}`);
+            throw new NotFoundException('user.invalid-id');
         }
         return user;
     }

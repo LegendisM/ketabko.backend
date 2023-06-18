@@ -1,0 +1,9 @@
+{
+    "invalid-id": "تراکنش با این شناسه یافت نشد",
+    "invalid-authority": "تراکنش با این شناسه بانکی یافت نشد",
+    "invalid-payment-pending-status": "این تراکنش در حالت انتظار نمی باشد",
+    "invalid-payment-driver": "درگاه پرداخت انتخاب شده یافت نشد",
+    "api-service-unavailable": "سرویس بانک در دسترس نمی باشد لطفا مجددا تلاش فرمایید",
+    "api-service-trouble": "پرداخت شما با شکست مواجه شد",
+    "operation-failed": "عملیات با شکست مواجه شد ، دوباره تلاش کنید"
+}

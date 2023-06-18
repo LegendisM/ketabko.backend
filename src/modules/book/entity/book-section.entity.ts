@@ -10,7 +10,7 @@ export class BookSection {
     @Column()
     title: string;
 
-    @OneToOne(() => StorageFile, (storageFile) => storageFile.id, { onDelete: 'SET NULL' })
+    @OneToOne(() => StorageFile, (storageFile) => storageFile.id, { eager: true, onDelete: 'SET NULL' })
     @JoinColumn()
     audio: StorageFile;
 

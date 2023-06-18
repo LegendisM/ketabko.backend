@@ -1,0 +1,6 @@
+{
+    "invalid-id": "Order not found with this ID",
+    "invalid-entity": "entity was not found with this ID",
+    "duplicate-order": "There is already an order for this product",
+    "already-paymented": "This order has been paid and completed"
+}

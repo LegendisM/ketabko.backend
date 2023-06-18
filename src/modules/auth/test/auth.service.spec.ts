@@ -50,7 +50,7 @@ describe('Auth Service', () => {
             const result = await service.signup({ username: 'alexa', password: '1234' });
             expect(result).toBeDefined();
             expect(result.state).toBe(true);
-            expect(result.message).toBe('signup_success');
+            expect(result.message).toBe('auth.signup_success');
             expect(result.token).toBeDefined();
         });
 
@@ -58,7 +58,7 @@ describe('Auth Service', () => {
             const result = await service.signup({ username: 'alexa', password: '1234' });
             expect(result).toBeDefined();
             expect(result.state).toBe(false);
-            expect(result.message).toBe('already_username_used');
+            expect(result.message).toBe('auth.already_username_used');
             expect(result.token).toBe('');
         });
     });
@@ -68,7 +68,7 @@ describe('Auth Service', () => {
             const result = await service.signin({ username: 'alexa-wrong', password: '1234' });
             expect(result).toBeDefined();
             expect(result.state).toBe(false);
-            expect(result.message).toBe('invalid_information');
+            expect(result.message).toBe('auth.invalid_information');
             expect(result.token).toBe('');
         });
 
@@ -76,7 +76,7 @@ describe('Auth Service', () => {
             const result = await service.signin({ username: 'alexa', password: 'wrong-password' });
             expect(result).toBeDefined();
             expect(result.state).toBe(false);
-            expect(result.message).toBe('invalid_information');
+            expect(result.message).toBe('auth.invalid_information');
             expect(result.token).toBe('');
         });
 
@@ -84,7 +84,7 @@ describe('Auth Service', () => {
             const result = await service.signin({ username: 'alexa', password: '1234' });
             expect(result).toBeDefined();
             expect(result.state).toBe(true);
-            expect(result.message).toBe('signin_success');
+            expect(result.message).toBe('auth.signin_success');
             expect(result.token).toBeDefined();
         });
     });

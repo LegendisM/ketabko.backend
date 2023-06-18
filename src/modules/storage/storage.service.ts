@@ -1,4 +1,4 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { StorageFile } from './entity/storage-file.entity';
 import { Repository } from 'typeorm';
@@ -28,10 +28,10 @@ export class StorageService {
     }
 
     async findAll({ limit, page }: PaginationDto): Promise<IPagination<StorageFile>> {
-        const files = await this.storageFileRepository.createQueryBuilder()
-            .skip((page - 1) * limit)
-            .take(limit - 1)
-            .getMany();
+        const files = await this.storageFileRepository.find({
+            skip: (page - 1) * limit,
+            take: limit - 1
+        });
         const filesCount = await this.storageFileRepository.count();
         return {
             items: files,
@@ -45,10 +45,18 @@ export class StorageService {
         return await this.storageFileRepository.findBy({ user: { id: user.id } });
     }
 
+    async findById(id: string, exception: boolean = false): Promise<StorageFile> {
+        const file = await this.storageFileRepository.findOneBy({ id });
+        if (exception && !file) {
+            throw new NotFoundException('storage.invalid-id');
+        }
+        return file;
+    }
+
     async validateMaxFileCount(user: User) {
         const count = await this.storageFileRepository.countBy({ user: { id: user.id } });
         if (count >= STORAGE_MAX_USER_FILE_COUNT) {
-            throw new ForbiddenException('Your File Storage is Full');
+            throw new ConflictException('storage.file-count-limit');
         }
     }
 }

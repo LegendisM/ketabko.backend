@@ -6,12 +6,13 @@ import { HeaderResolver, I18nModule } from 'nestjs-i18n';
 import { UserModule } from '../user/user.module';
 import { AuthModule } from '../auth/auth.module';
 import { StorageModule } from '../storage/storage.module';
-import { ProductModule } from '../product/product.module';
 import { OrderModule } from '../order/order.module';
 import { BookModule } from '../book/book.module';
 import { CategoryModule } from '../category/category.module';
 import { CommentModule } from '../comment/comment.module';
 import { AuthorModule } from '../author/author.module';
+import { PolicyModule } from '../policy/policy.module';
+import { PaymentModule } from '../payment/payment.module';
 
 @Module({
   imports: [
@@ -20,7 +21,7 @@ import { AuthorModule } from '../author/author.module';
       envFilePath: './.env',
     }),
     I18nModule.forRoot({
-      fallbackLanguage: 'en',
+      fallbackLanguage: 'fa',
       loaderOptions: {
         path: path.join(__dirname, '../../i18n/')
       },
@@ -41,9 +42,10 @@ import { AuthorModule } from '../author/author.module';
     }),
     UserModule,
     AuthModule,
+    PolicyModule,
     StorageModule,
-    ProductModule,
     OrderModule,
+    PaymentModule,
     AuthorModule,
     BookModule,
     CategoryModule,

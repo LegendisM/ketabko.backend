@@ -1,5 +1,6 @@
-import { IsString, IsUUID, Length } from "class-validator";
+import { IsNumber, IsString, IsUUID, Length, Max, Min } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
+import { Transform } from "class-transformer";
 
 export class BaseBookDto {
     @ApiProperty()
@@ -21,6 +22,16 @@ export class BaseBookDto {
     @IsString()
     @Length(1, 255)
     description: string;
+
+    @ApiProperty({
+        minimum: 0,
+        maximum: 5000000
+    })
+    @Transform(({ value }) => parseInt(value))
+    @IsNumber()
+    @Min(0)
+    @Max(5000000)
+    price: number;
 
     @ApiProperty({
         description: 'UUID Of the StorageFile for Cover Image'

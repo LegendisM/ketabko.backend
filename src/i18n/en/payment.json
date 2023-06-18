@@ -1,0 +1,9 @@
+{
+    "invalid-id": "No Payment found with this ID",
+    "invalid-authority": "Payment not found with this bank ID",
+    "invalid-payment-pending-status": "This transaction is not pending",
+    "invalid-payment-driver": "The selected payment gateway could not be found",
+    "api-service-unavailable": "The bank service is not available, please try again",
+    "api-service-trouble": "Your payment failed",
+    "operation-failed": "Operation failed, try again"
+}

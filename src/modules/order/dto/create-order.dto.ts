@@ -3,5 +3,5 @@ import { BaseOrderDto } from "./base-order.dto";
 
 export class CreateOrderDto extends PickType(
     BaseOrderDto,
-    ['product']
+    ['entityType', 'entityId']
 ) { }

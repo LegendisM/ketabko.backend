@@ -26,10 +26,10 @@ export class AuthService {
                 password: bcrypt.hashSync(authDto.password, 6)
             });
             token = this.generateToken({ id: user.id, username: user.username });
-            message = 'signup_success';
+            message = 'auth.signup_success';
             state = true;
         } else {
-            message = 'already_username_used';
+            message = 'auth.already_username_used';
         }
 
         return { state, token, message }
@@ -41,10 +41,10 @@ export class AuthService {
 
         if (user && bcrypt.compareSync(authDto.password, user.password)) {
             token = this.generateToken({ id: user.id, username: user.username });
-            message = 'signin_success';
+            message = 'auth.signin_success';
             state = true;
         } else {
-            message = 'invalid_information';
+            message = 'auth.invalid_information';
         }
 
         return { state, token, message }

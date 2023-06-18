@@ -1,7 +1,7 @@
-import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { OrderStatus } from "../interface/order.interface";
+import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { OrderStatus, OrderableType } from "../interface/order.interface";
 import { User } from "src/modules/user/entity/user.entity";
-import { Product } from "src/modules/product/entity/product.entity";
+import { Payment } from "src/modules/payment/entity/payment.entity";
 
 @Entity()
 export class Order {
@@ -15,12 +15,25 @@ export class Order {
     })
     status: OrderStatus;
 
+    @Column({
+        type: 'enum',
+        enum: OrderableType,
+        nullable: false
+    })
+    entityType: OrderableType;
+
+    @Column({ type: 'uuid', nullable: false })
+    entityId: string;
+
+    @Column()
+    price: number;
+
     @CreateDateColumn()
     createdAt: Date;
 
+    @OneToMany(() => Payment, (payment) => payment.order)
+    payments: Payment[];
+
     @ManyToOne(() => User, (user) => user.orders, { onDelete: 'CASCADE' })
     user: User;
-
-    @ManyToOne(() => Product, (product) => product.orders, { onDelete: 'CASCADE' })
-    product: Product;
 }
