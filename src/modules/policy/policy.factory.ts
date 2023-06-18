@@ -11,10 +11,13 @@ export class PolicyFactory {
             createMongoAbility
         );
 
+        // TODO: fix conditions
+
         can(PolicyAction.Read, 'Comment');
         can([PolicyAction.Delete], 'StorageFile', { user: user.id });
         can([PolicyAction.Update, PolicyAction.Delete], 'Comment', { user: user.id });
         can([PolicyAction.Read, PolicyAction.Update], 'Order', { user: user.id });
+        can([PolicyAction.Read, PolicyAction.Update], 'Payment', { user: user.id });
 
         if (user.roles.includes(Role.Moderator)) {
             can(PolicyAction.Manage, 'all');

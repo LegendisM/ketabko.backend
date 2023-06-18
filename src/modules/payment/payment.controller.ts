@@ -10,6 +10,10 @@ import { CurrentUser } from '../user/decorator/user.decorator';
 import { User } from '../user/entity/user.entity';
 import { FindPaymentsDto } from './dto/find-payment.dto';
 import { PaymentAdapterService } from './service/payment-adapter.service';
+import { PolicyService } from '../policy/policy.service';
+import { PolicyAction } from '../policy/interface/policy.interface';
+import { PaymentDriverType } from './interface/payment-driver.interface';
+import _ from 'lodash';
 
 @Controller({
     path: '/payments',
@@ -19,7 +23,8 @@ import { PaymentAdapterService } from './service/payment-adapter.service';
 export class PaymentController {
     constructor(
         private paymentService: PaymentService,
-        private paymentAdapterService: PaymentAdapterService
+        private paymentAdapterService: PaymentAdapterService,
+        private policyService: PolicyService
     ) { }
 
     @Get('/')
@@ -38,14 +43,18 @@ export class PaymentController {
         @Param('id') id: string,
         @CurrentUser() user: User
     ): Promise<string> {
-        // TODO: check policy to this payment from this user or not
+        const payment = await this.paymentService.findById(id, true);
+        this.policyService.forPayment(PolicyAction.Read, user, payment, true);
         return await this.paymentAdapterService.start(id);
     }
 
-    @Get('/callback')
-    async onPaymentCallback() {
-        // return await this.paymentDriverService.process
-        // tODO: find order with this authority and if he in status processing can be handle and call verify
+    @Get('/callback/:driver')
+    async onPaymentCallback(
+        @Param('driver') driver: PaymentDriverType,
+        @Param() data: Record<string, string>
+    ) {
+        const result = this.paymentAdapterService.process(driver, _.omit(data, ['driver']));
+        return result ? 'The purchase was made successfully' : 'The Payment Is Not Successfully, Try Again';
     }
 
     @Post('/')

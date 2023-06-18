@@ -1,5 +1,5 @@
 import { Order } from "src/modules/order/entity/order.entity";
-import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { AfterUpdate, Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { PaymentStatus } from "../interface/payment.interface";
 import { User } from "src/modules/user/entity/user.entity";
 import { PaymentDriverType } from "../interface/payment-driver.interface";

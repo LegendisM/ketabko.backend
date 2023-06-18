@@ -54,18 +54,6 @@ export class OrderController {
         return await this.orderService.create(createDto, user);
     }
 
-    // TODO
-    // @Put('/:id')
-    // async updateOrder(
-    //     @Param('id') id: string,
-    //     @CurrentUser() user: User
-    // ) {
-    //     const order = await this.orderService.findById(id, true);
-    //     this.policyService.forOrder(PolicyAction.Update, user, order, true);
-    //     // this.orderService.update();
-    //     // TODO: handle to complete or fail order
-    // }
-
     @Delete('/:id')
     @Roles(Role.Admin)
     async removeOrder(@Param('id') id: string) {

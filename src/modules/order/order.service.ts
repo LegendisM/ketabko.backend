@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Order } from './entity/order.entity';
 import { Repository } from 'typeorm';
 import { CreateOrderDto } from './dto/create-order.dto';
-import { OrderableType } from './interface/order.interface';
+import { OrderStatus, OrderableType } from './interface/order.interface';
 import { BookService } from '../book/book.service';
 import { User } from '../user/entity/user.entity';
 import { IPagination } from 'src/common/interface/pagination.interface';
@@ -17,9 +17,9 @@ export class OrderService {
     ) { }
 
     async create({ entityId, entityType }: CreateOrderDto, user: User): Promise<Order> {
-        await this.validateEntity(entityType, entityId, true);
+        const entity = await this.validateEntity(entityType, entityId, true);
         await this.preventDuplicate(entityType, entityId, user);
-        const order = await this.orderRepository.create({ entityId, entityType, user });
+        const order = await this.orderRepository.create({ entityId, entityType, price: entity.price, user });
         return await this.orderRepository.save(order);
     }
 
@@ -57,6 +57,12 @@ export class OrderService {
         return order;
     }
 
+    async update(id: string, updateDto: Partial<Order>): Promise<Order> {
+        const order = await this.findById(id, true);
+        Object.assign(order, updateDto);
+        return await this.orderRepository.save(order);
+    }
+
     async remove(id: string): Promise<Order> {
         const order = await this.findById(id, true);
         return await this.orderRepository.remove(order);
@@ -69,8 +75,8 @@ export class OrderService {
         }
     }
 
-    async validateEntity(entityType: OrderableType, entityId: string, exception: boolean = false): Promise<unknown> {
-        let entity;
+    async validateEntity(entityType: OrderableType, entityId: string, exception: boolean = false): Promise<unknown & { price: number }> {
+        let entity: unknown & { price: number };
         switch (entityType) {
             case OrderableType.Book:
                 entity = await this.bookService.findById(entityId);
@@ -80,5 +86,14 @@ export class OrderService {
             throw new NotFoundException(`Invalid FindOne Entity With Id ${entityId} For Type ${entityType}`);
         }
         return entity;
+    }
+
+    async validateForPayment(id: string, exception: boolean = false): Promise<boolean> {
+        const order = await this.findById(id, true);
+        const state = order.status == OrderStatus.Complete;
+        if (exception && !state) {
+            throw new ConflictException('You Already Paid For This Order');
+        }
+        return state;
     }
 }

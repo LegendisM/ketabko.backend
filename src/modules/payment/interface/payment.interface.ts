@@ -13,4 +13,6 @@ export interface IPaymentRequest {
 export interface IPaymentVerify {
     state: boolean;
     code: number;
+    paymentId: string;
+    tracking: string;
 }

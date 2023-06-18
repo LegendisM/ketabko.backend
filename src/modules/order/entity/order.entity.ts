@@ -25,6 +25,9 @@ export class Order {
     @Column({ type: 'uuid', nullable: false })
     entityId: string;
 
+    @Column()
+    price: number;
+
     @CreateDateColumn()
     createdAt: Date;
 

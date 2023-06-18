@@ -12,6 +12,7 @@ import { CategoryModule } from '../category/category.module';
 import { CommentModule } from '../comment/comment.module';
 import { AuthorModule } from '../author/author.module';
 import { PolicyModule } from '../policy/policy.module';
+import { PaymentModule } from '../payment/payment.module';
 
 @Module({
   imports: [
@@ -44,6 +45,7 @@ import { PolicyModule } from '../policy/policy.module';
     PolicyModule,
     StorageModule,
     OrderModule,
+    PaymentModule,
     AuthorModule,
     BookModule,
     CategoryModule,

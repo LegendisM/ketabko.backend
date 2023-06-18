@@ -7,6 +7,7 @@ import { User } from '../../user/entity/user.entity';
 import { IPagination } from 'src/common/interface/pagination.interface';
 import { FindPaymentsDto } from '../dto/find-payment.dto';
 import { CreatePaymentDto } from '../dto/create-payment.dto';
+import { PaymentDriverType } from '../interface/payment-driver.interface';
 
 @Injectable()
 export class PaymentService {
@@ -17,6 +18,7 @@ export class PaymentService {
 
     async create({ order, driver }: CreatePaymentDto, user: User): Promise<Payment> {
         const payment = this.paymentRepository.create({ driver, user });
+        await this.orderService.validateForPayment(order, true);
         payment.order = await this.orderService.findById(order, true);
         return await this.paymentRepository.save(payment);
     }
@@ -51,6 +53,14 @@ export class PaymentService {
         const payment = await this.paymentRepository.findOneBy({ id });
         if (exception && !payment) {
             throw new NotFoundException(`Invalid FindOne Payment With Id ${id}`);
+        }
+        return payment;
+    }
+
+    async findByAuthority(authority: string, driver: PaymentDriverType, exception: boolean = false): Promise<Payment> {
+        const payment = await this.paymentRepository.findOneBy({ authority, driver });
+        if (exception && !payment) {
+            throw new NotFoundException(`Invalid FindOne Payment`);
         }
         return payment;
     }
