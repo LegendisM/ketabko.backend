@@ -1,4 +1,4 @@
-import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { StorageFile } from './entity/storage-file.entity';
 import { Repository } from 'typeorm';
@@ -48,7 +48,7 @@ export class StorageService {
     async findById(id: string, exception: boolean = false): Promise<StorageFile> {
         const file = await this.storageFileRepository.findOneBy({ id });
         if (exception && !file) {
-            throw new NotFoundException(`Invalid FindOne StorageFile With Id ${id}`);
+            throw new NotFoundException('storage.invalid-id');
         }
         return file;
     }
@@ -56,7 +56,7 @@ export class StorageService {
     async validateMaxFileCount(user: User) {
         const count = await this.storageFileRepository.countBy({ user: { id: user.id } });
         if (count >= STORAGE_MAX_USER_FILE_COUNT) {
-            throw new ForbiddenException('Your File Storage is Full');
+            throw new ConflictException('storage.file-count-limit');
         }
     }
 }

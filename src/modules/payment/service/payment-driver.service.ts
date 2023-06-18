@@ -21,7 +21,7 @@ export class PaymentDriverService {
                 driver = this.paymentNextpayDriver;
                 break;
             default:
-                throw new NotFoundException(`Invalid Payment Driver With Type ${type}`);
+                throw new NotFoundException('payment.invalid-payment-driver');
                 break;
         }
         return driver;

@@ -50,7 +50,7 @@ export class CommentService {
     async findById(id: string, exception: boolean = false): Promise<Comment> {
         const comment = await this.commentRepository.findOneBy({ id });
         if (exception && !comment) {
-            throw new NotFoundException(`Invalid FindOne Comment With Id ${id}`);
+            throw new NotFoundException('comment.invalid-id');
         }
         return comment;
     }
@@ -68,7 +68,7 @@ export class CommentService {
                 break;
         }
         if (exception && !entity) {
-            throw new NotFoundException(`Invalid FindOne Entity With Id ${entityId} For Type ${entityType}`);
+            throw new NotFoundException('comment.invalid-entity');
         }
         return entity;
     }

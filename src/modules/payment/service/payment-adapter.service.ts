@@ -23,7 +23,7 @@ export class PaymentAdapterService {
             await this.paymentService.update(payment.id, { status: PaymentStatus.Processing, authority });
             return url;
         } else {
-            throw new ConflictException(`This Payment With Id ${id} Is Not Pending`);
+            throw new ConflictException('payment.invalid-payment-pending-status');
         }
     }
 

@@ -1,0 +1,5 @@
+{
+    "invalid-id": "File with this id not found",
+    "file-count-limit": "You have reached the maximum number of file uploads",
+    "compress-failed": "The compression operation failed. Please try again."
+}

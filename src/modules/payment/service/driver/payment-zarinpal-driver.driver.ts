@@ -48,12 +48,12 @@ export class PaymentZarinpalDriver extends PaymentDriver implements OnModuleInit
                 }
             )
         ).catch(() => {
-            throw new ConflictException('Zarinpal Is Not Available, Try Again');
+            throw new ConflictException('payment.api-service-unavailable');
         });
 
         const { code, authority } = response.data;
         if (code != 100) {
-            throw new ConflictException('Zarinpal Payment Problem');
+            throw new ConflictException('payment.api-service-trouble');
         }
 
         return { authority, url: `${this.config.payEndpoint}${authority}` };
@@ -61,7 +61,7 @@ export class PaymentZarinpalDriver extends PaymentDriver implements OnModuleInit
 
     async verify({ Authority, Status }: Record<string, string>): Promise<IPaymentVerify> {
         if (Status != "OK") {
-            throw new ConflictException('The Payment Operation Failed');
+            throw new ConflictException('payment.operation-failed');
         }
 
         const payment = await this.paymentService.findByAuthority(Authority, this.type, true);
@@ -79,7 +79,7 @@ export class PaymentZarinpalDriver extends PaymentDriver implements OnModuleInit
             const { code, ref_id } = response.data;
             return { state: (code == 100), code: code, paymentId: payment.id, tracking: ref_id };
         } else {
-            throw new ConflictException('The Payment Operation Failed');
+            throw new ConflictException('payment.operation-failed');
         }
     }
 }

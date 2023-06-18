@@ -52,7 +52,7 @@ export class PaymentService {
     async findById(id: string, exception: boolean = false): Promise<Payment> {
         const payment = await this.paymentRepository.findOneBy({ id });
         if (exception && !payment) {
-            throw new NotFoundException(`Invalid FindOne Payment With Id ${id}`);
+            throw new NotFoundException('payment.invalid-id');
         }
         return payment;
     }
@@ -60,7 +60,7 @@ export class PaymentService {
     async findByAuthority(authority: string, driver: PaymentDriverType, exception: boolean = false): Promise<Payment> {
         const payment = await this.paymentRepository.findOneBy({ authority, driver });
         if (exception && !payment) {
-            throw new NotFoundException(`Invalid FindOne Payment`);
+            throw new NotFoundException('payment.invalid-authority');
         }
         return payment;
     }

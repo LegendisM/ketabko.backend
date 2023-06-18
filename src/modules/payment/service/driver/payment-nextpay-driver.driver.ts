@@ -50,12 +50,12 @@ export class PaymentNextpayDriver extends PaymentDriver implements OnModuleInit 
                 }
             )
         ).catch(() => {
-            throw new ConflictException('Nextpay Is Not Available, Try Again')
+            throw new ConflictException('payment.api-service-unavailable')
         });
 
         const { code, trans_id } = response.data;
         if (code != -1) {
-            throw new ConflictException('Nextpay Payment Problem');
+            throw new ConflictException('payment.api-service-trouble');
         }
 
         return { authority: trans_id, url: `${this.config.payEndpoint}${trans_id}` };
@@ -78,7 +78,7 @@ export class PaymentNextpayDriver extends PaymentDriver implements OnModuleInit 
             const { code, Shaparak_Ref_Id } = response.data;
             return { state: (code == 0), code: code, paymentId: payment.id, tracking: Shaparak_Ref_Id };
         } else {
-            throw new ConflictException('The Payment Operation Failed');
+            throw new ConflictException('payment.operation-failed');
         }
     }
 }

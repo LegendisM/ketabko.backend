@@ -51,7 +51,7 @@ export class BookService {
     async findById(id: string, exception: boolean = false): Promise<Book> {
         const book = await this.bookRepository.findOneBy({ id });
         if (exception && !book) {
-            throw new NotFoundException(`Invalid FindOne Book With Id ${id}`);
+            throw new NotFoundException('book.invalid-id');
         }
         return book;
     }

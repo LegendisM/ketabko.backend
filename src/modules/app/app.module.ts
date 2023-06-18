@@ -21,7 +21,7 @@ import { PaymentModule } from '../payment/payment.module';
       envFilePath: './.env',
     }),
     I18nModule.forRoot({
-      fallbackLanguage: 'en',
+      fallbackLanguage: 'fa',
       loaderOptions: {
         path: path.join(__dirname, '../../i18n/')
       },

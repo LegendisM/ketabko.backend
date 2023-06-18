@@ -1,0 +1,5 @@
+{
+    "invalid-id": "Category not found with this ID",
+    "invalid-name": "No category found with this name",
+    "duplicate-entity": "This category already exists"
+}

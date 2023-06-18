@@ -41,7 +41,7 @@ export class CategoryService {
     async findById(id: string, exception: boolean = false): Promise<Category> {
         const category = await this.categoryRepository.findOneBy({ id });
         if (exception && !category) {
-            throw new NotFoundException(`Invalid FindOne Category With Id ${id}`);
+            throw new NotFoundException('category.invalid-id');
         }
         return category;
     }
@@ -49,7 +49,7 @@ export class CategoryService {
     async findByName(name: string, exception: boolean = false): Promise<Category> {
         const category = await this.categoryRepository.findOneBy({ name });
         if (exception && !category) {
-            throw new NotFoundException(`Invalid FindOne Category With Name ${name}`);
+            throw new NotFoundException('category.invalid-name');
         }
         return category;
     }
@@ -68,7 +68,7 @@ export class CategoryService {
     async preventDuplicate(name: string) {
         const category = await this.findByName(name);
         if (category) {
-            throw new ConflictException(`Duplicate Category With Name ${name}`);
+            throw new ConflictException('category.duplicate-entity');
         }
     }
 }

@@ -52,7 +52,7 @@ export class OrderService {
     async findById(id: string, exception: boolean = false): Promise<Order> {
         const order = await this.orderRepository.findOneBy({ id });
         if (exception && !order) {
-            throw new NotFoundException(`Invalid FindOne Order With Id ${id}`);
+            throw new NotFoundException('order.invalid-id');
         }
         return order;
     }
@@ -71,7 +71,7 @@ export class OrderService {
     async preventDuplicate(entityType: OrderableType, entityId: string, user: User) {
         const order = await this.findByEntity(entityType, entityId, user);
         if (order) {
-            throw new ConflictException(`Duplicate Order With Same Entity By Id ${order}`);
+            throw new ConflictException('order.duplicate-order');
         }
     }
 
@@ -83,7 +83,7 @@ export class OrderService {
                 break;
         }
         if (exception && !entity) {
-            throw new NotFoundException(`Invalid FindOne Entity With Id ${entityId} For Type ${entityType}`);
+            throw new NotFoundException('order.invalid-entity');
         }
         return entity;
     }
@@ -92,7 +92,7 @@ export class OrderService {
         const order = await this.findById(id, true);
         const state = order.status == OrderStatus.Complete;
         if (exception && !state) {
-            throw new ConflictException('You Already Paid For This Order');
+            throw new ConflictException('order.already-paymented');
         }
         return state;
     }

@@ -29,7 +29,7 @@ export const CompressedFile = createParamDecorator(
             }).toBuffer();
             await sharp(buffer).toFile(file.path);
         } catch (error) {
-            throw new InternalServerErrorException();
+            throw new InternalServerErrorException('storage.compress-failed');
         }
 
         return file;
