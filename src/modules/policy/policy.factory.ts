@@ -7,17 +7,15 @@ import { Role } from "../user/interface/role.interface";
 @Injectable()
 export class PolicyFactory {
     userAbility(user: User) {
-        const { can, cannot, build } = new AbilityBuilder<PureAbility<[PolicyAction, PolicySubjects]>>(
+        const { can, build } = new AbilityBuilder<PureAbility<[PolicyAction, PolicySubjects]>>(
             createMongoAbility
         );
 
-        // TODO: fix conditions
-
         can(PolicyAction.Read, 'Comment');
-        can([PolicyAction.Delete], 'StorageFile', { user: user.id });
-        can([PolicyAction.Update, PolicyAction.Delete], 'Comment', { user: user.id });
-        can([PolicyAction.Read, PolicyAction.Update], 'Order', { user: user.id });
-        can([PolicyAction.Read, PolicyAction.Update], 'Payment', { user: user.id });
+        can([PolicyAction.Delete], 'StorageFile', { 'user.id': user.id });
+        can([PolicyAction.Update, PolicyAction.Delete], 'Comment', { 'user.id': user.id });
+        can([PolicyAction.Read, PolicyAction.Update], 'Order', { 'user.id': user.id });
+        can([PolicyAction.Read, PolicyAction.Update], 'Payment', { 'user.id': user.id });
 
         if (user.roles.includes(Role.Moderator)) {
             can(PolicyAction.Manage, 'all');
