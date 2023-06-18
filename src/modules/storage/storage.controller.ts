@@ -1,5 +1,5 @@
 import { Controller, Get, Post, UseInterceptors, UploadedFile, Body, Query, SerializeOptions } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiConflictResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { StorageService } from './storage.service';
 import { Auth } from '../auth/decorator/auth.decorator';
 import { CurrentUser } from '../user/decorator/user.decorator';
@@ -27,11 +27,17 @@ export class StorageController {
 
     @Get('/')
     @Roles(Role.Admin)
+    @ApiOkResponse({
+        description: 'Receive Array Of Files With Paginate'
+    })
     async getAllFiles(@Query() paginationDto: PaginationDto): Promise<IPagination<StorageFile>> {
         return await this.storageService.findAll(paginationDto);
     }
 
     @Get('/me')
+    @ApiOkResponse({
+        description: 'Receive Array Of User Files'
+    })
     async getUserFiles(@CurrentUser() user: User): Promise<StorageFile[]> {
         return await this.storageService.findAllByUser(user);
     }
@@ -39,6 +45,9 @@ export class StorageController {
     @Post('/')
     @Roles(Role.Admin)
     @UseInterceptors(FileInterceptor('file'))
+    @ApiOkResponse({
+        description: 'File Storage Created As Admin'
+    })
     async uploadFile(
         @Body() createDto: CreateStorageFileDto,
         @UploadedFile(new ParseStorageFilePipe())
@@ -50,6 +59,12 @@ export class StorageController {
     @Post('/me')
     @SerializeOptions({ excludePrefixes: ['user'] })
     @UseInterceptors(FileInterceptor('file'))
+    @ApiOkResponse({
+        description: 'File Storage Created As User'
+    })
+    @ApiConflictResponse({
+        description: 'File Max Count Limitation'
+    })
     async uploadUserFile(
         @Body() createDto: CreateStorageFileDto,
         @CurrentUser() user: User,
