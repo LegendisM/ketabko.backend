@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Put, Delete, Param, Body, Query } from '@nestjs/common';
+import { Controller, Get, Post, Patch, Delete, Param, Body, Query } from '@nestjs/common';
 import { BookService } from './book.service';
 import { ApiCreatedResponse, ApiNotFoundResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { FindBooksDto } from './dto/find-book.dto';
@@ -50,7 +50,7 @@ export class BookController {
         return await this.bookService.create(createDto);
     }
 
-    @Put('/:id')
+    @Patch('/:id')
     @Roles(Role.Admin)
     @ApiOkResponse({
         description: 'Book Updated Successfully'

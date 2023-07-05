@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Patch, Query } from '@nestjs/common';
 import { ApiCreatedResponse, ApiNotFoundResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { AuthorService } from './author.service';
 import { IPagination } from 'src/common/interface/pagination.interface';
@@ -50,7 +50,7 @@ export class AuthorController {
         return await this.authorService.create(createDto);
     }
 
-    @Put('/:id')
+    @Patch('/:id')
     @Roles(Role.Admin)
     @ApiOkResponse({
         description: 'Author Updated Successfully'
