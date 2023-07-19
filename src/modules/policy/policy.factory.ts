@@ -16,6 +16,7 @@ export class PolicyFactory {
         can([PolicyAction.Update, PolicyAction.Delete], 'Comment', { 'user.id': user.id });
         can([PolicyAction.Read, PolicyAction.Update], 'Order', { 'user.id': user.id });
         can([PolicyAction.Read, PolicyAction.Update], 'Payment', { 'user.id': user.id });
+        can([PolicyAction.Read, PolicyAction.Update, PolicyAction.Delete], 'BookSectionData', { 'user.id': user.id });
 
         if (user.roles.includes(Role.Moderator)) {
             can(PolicyAction.Manage, 'all');

@@ -8,14 +8,16 @@ import { StorageModule } from '../storage/storage.module';
 import { BookSectionData } from './entity/book-section-data.entity';
 import { BookSectionService } from './service/book-section.service';
 import { BookSectionDataService } from './service/book-section-data.service';
+import { BookSectionController } from './controller/book-section.controller';
+import { BookSectionDataController } from './controller/book-section-data.controller';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Book, BookSection, BookSectionData]),
     StorageModule
   ],
-  controllers: [BookController],
+  controllers: [BookController, BookSectionController, BookSectionDataController],
   providers: [BookService, BookSectionService, BookSectionDataService],
-  exports: [BookService]
+  exports: [BookService, BookSectionService, BookSectionDataService]
 })
 export class BookModule { }

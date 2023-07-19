@@ -1,11 +1,11 @@
-import { Controller, Get, Post, Patch, Delete, Param, Body, Query } from '@nestjs/common';
-import { BookService } from '../service/book.service';
+import { Controller, Get, Post, Put, Delete, Param, Body, Query } from '@nestjs/common';
+import { BookService } from './../service/book.service';
 import { ApiCreatedResponse, ApiNotFoundResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
-import { FindBooksDto } from '../dto/book/find-book.dto';
+import { FindBooksDto } from './../dto/book/find-book.dto';
 import { IPagination } from 'src/common/interface/pagination.interface';
 import { Book } from '../entity/book.entity';
-import { CreateBookDto } from '../dto/book/create-book.dto';
-import { UpdateBookDto } from '../dto/book/update-book.dto';
+import { CreateBookDto } from './../dto/book/create-book.dto';
+import { UpdateBookDto } from './../dto/book/update-book.dto';
 import { Roles } from 'src/modules/user/decorator/role.decorator';
 import { Role } from 'src/modules/user/interface/role.interface';
 
@@ -50,7 +50,7 @@ export class BookController {
         return await this.bookService.create(createDto);
     }
 
-    @Patch('/:id')
+    @Put('/:id')
     @Roles(Role.Admin)
     @ApiOkResponse({
         description: 'Book Updated Successfully'
