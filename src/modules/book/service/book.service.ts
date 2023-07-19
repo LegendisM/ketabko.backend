@@ -1,13 +1,14 @@
 import _ from 'lodash';
+import slugify from "slugify";
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { CreateBookDto } from './dto/create-book.dto';
-import { Book } from './entity/book.entity';
+import { CreateBookDto } from '../dto/book/create-book.dto';
+import { Book } from '../entity/book.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Between, Like, Repository } from 'typeorm';
-import { UpdateBookDto } from './dto/update-book.dto';
-import { FindBooksDto } from './dto/find-book.dto';
+import { UpdateBookDto } from '../dto/book/update-book.dto';
+import { FindBooksDto } from '../dto/book/find-book.dto';
 import { IPagination } from 'src/common/interface/pagination.interface';
-import { StorageService } from '../storage/storage.service';
+import { StorageService } from '../../storage/storage.service';
 
 @Injectable()
 export class BookService {
@@ -23,7 +24,7 @@ export class BookService {
         return await this.bookRepository.save(book);
     }
 
-    async findAll({ title, description, minPrice, maxPrice, limit, page }: FindBooksDto): Promise<IPagination<Book>> {
+    async findAll({ title, description, minPrice, maxPrice, category, limit, page }: FindBooksDto): Promise<IPagination<Book>> {
         const books = await this.bookRepository.find({
             where: [
                 (title) ?
@@ -34,6 +35,9 @@ export class BookService {
                     : null,
                 (minPrice && maxPrice) ?
                     { price: Between(minPrice, maxPrice) }
+                    : null,
+                (category) ?
+                    { categories: { slug: slugify(category) } }
                     : null
             ],
             skip: (page - 1) * limit,

@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
-import { PaymentDriver } from "../classes/payment-driver.class";
+import { PaymentDriver } from "../class/payment-driver.class";
 import { PaymentDriverType } from "../interface/payment-driver.interface";
 import { PaymentZarinpalDriver } from "./driver/payment-zarinpal-driver.driver";
 import { PaymentNextpayDriver } from "./driver/payment-nextpay-driver.driver";
