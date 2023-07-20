@@ -1,6 +1,6 @@
 import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Book } from "./book.entity";
-import { BookField } from "../class/book-field.class";
+import { BookSectionField } from "../class/book-section-field.class";
 import { BookSectionDocument } from "./book-section-document.entity";
 
 @Entity()
@@ -18,7 +18,7 @@ export class BookSection {
             to: (value) => JSON.stringify(value)
         }
     })
-    fields: BookField[];
+    fields: BookSectionField[];
 
     @OneToMany(() => BookSectionDocument, (sectionDocument) => sectionDocument.section)
     documents: BookSectionDocument[];

@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Payment } from '../entity/payment.entity';
-import { Repository } from 'typeorm';
+import { FindOptionsWhere, Repository } from 'typeorm';
 import { OrderService } from '../../order/order.service';
 import { User } from '../../user/entity/user.entity';
 import { IPagination } from 'src/common/interface/pagination.interface';
@@ -24,19 +24,20 @@ export class PaymentService {
     }
 
     async findAll({ status, user, limit, page }: FindPaymentsDto): Promise<IPagination<Payment>> {
+        const where: FindOptionsWhere<Payment>[] = [
+            (status) ?
+                { status }
+                : null,
+            (user) ?
+                { user: { id: user } }
+                : null
+        ];
         const payments = await this.paymentRepository.find({
-            where: [
-                (status) ?
-                    { status }
-                    : null,
-                (user) ?
-                    { user: { id: user } }
-                    : null,
-            ],
+            where: where,
             skip: (page - 1) * limit,
             take: limit - 1
         });
-        const paymentsCount = await this.paymentRepository.count();
+        const paymentsCount = await this.paymentRepository.count({ where });
         return {
             items: payments,
             limit: limit,

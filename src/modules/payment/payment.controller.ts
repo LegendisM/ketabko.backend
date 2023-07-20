@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Delete, Param, Body, Query } from '@nestjs/common';
+import { Controller, Get, Post, Delete, Param, Body, Query, ParseUUIDPipe } from '@nestjs/common';
 import { PaymentService } from './service/payment.service';
 import { Roles } from '../user/decorator/role.decorator';
 import { Role } from '../user/interface/role.interface';
@@ -60,7 +60,7 @@ export class PaymentController {
         description: 'Invalid Payment Stauts | Invalid Payment Driver Actions'
     })
     async startPayment(
-        @Param('id') id: string,
+        @Param('id', ParseUUIDPipe) id: string,
         @CurrentUser() user: User
     ): Promise<string> {
         const payment = await this.paymentService.findById(id, true);
@@ -111,7 +111,7 @@ export class PaymentController {
     @ApiNotFoundResponse({
         description: 'Payment Not Found'
     })
-    async removePayment(@Param('id') id: string) {
+    async removePayment(@Param('id', ParseUUIDPipe) id: string) {
         await this.paymentService.remove(id);
     }
 }

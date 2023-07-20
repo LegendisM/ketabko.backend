@@ -1,7 +1,7 @@
-import { IsString, IsUUID, Length } from "class-validator";
+import { IsString, IsUUID, Length, ValidateNested } from "class-validator";
 import { Type } from "class-transformer";
 import { ApiProperty } from "@nestjs/swagger";
-import { BookField } from "../../class/book-field.class";
+import { BookSectionField } from "../../class/book-section-field.class";
 
 export class BaseBookSectionDto {
     @ApiProperty()
@@ -17,10 +17,11 @@ export class BaseBookSectionDto {
     title: string;
 
     @ApiProperty({
-        type: [BookField]
+        type: [BookSectionField]
     })
-    @Type(() => BookField)
-    fields: BookField[];
+    @ValidateNested({ each: true })
+    @Type(() => BookSectionField)
+    fields: BookSectionField[];
 
     @ApiProperty({
         description: 'UUID Of Book'

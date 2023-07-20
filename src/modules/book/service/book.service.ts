@@ -4,7 +4,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateBookDto } from '../dto/book/create-book.dto';
 import { Book } from '../entity/book.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Between, Like, Repository } from 'typeorm';
+import { Between, FindOptionsWhere, Like, Repository } from 'typeorm';
 import { UpdateBookDto } from '../dto/book/update-book.dto';
 import { FindBooksDto } from '../dto/book/find-book.dto';
 import { IPagination } from 'src/common/interface/pagination.interface';
@@ -25,25 +25,26 @@ export class BookService {
     }
 
     async findAll({ title, description, minPrice, maxPrice, category, limit, page }: FindBooksDto): Promise<IPagination<Book>> {
+        const where: FindOptionsWhere<Book>[] = [
+            (title) ?
+                { title: Like(`%${title}%`) }
+                : null,
+            (description) ?
+                { description: Like(`%${description}%`) }
+                : null,
+            (minPrice && maxPrice) ?
+                { price: Between(minPrice, maxPrice) }
+                : null,
+            (category) ?
+                { categories: { slug: slugify(category) } }
+                : null
+        ];
         const books = await this.bookRepository.find({
-            where: [
-                (title) ?
-                    { title: Like(`%${title}%`) }
-                    : null,
-                (description) ?
-                    { description: Like(`%${description}%`) }
-                    : null,
-                (minPrice && maxPrice) ?
-                    { price: Between(minPrice, maxPrice) }
-                    : null,
-                (category) ?
-                    { categories: { slug: slugify(category) } }
-                    : null
-            ],
+            where: where,
             skip: (page - 1) * limit,
             take: limit - 1
         });
-        const booksCount = await this.bookRepository.count();
+        const booksCount = await this.bookRepository.count({ where });
         return {
             items: books,
             limit: limit,

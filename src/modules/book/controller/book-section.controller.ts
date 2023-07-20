@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Put, Delete, Param, Body } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Param, Body, ParseUUIDPipe } from '@nestjs/common';
 import { ApiCreatedResponse, ApiNotFoundResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { Roles } from 'src/modules/user/decorator/role.decorator';
 import { Role } from 'src/modules/user/interface/role.interface';
@@ -32,7 +32,7 @@ export class BookSectionController {
     @ApiNotFoundResponse({
         description: 'Book Section Not Found'
     })
-    async getBookSectionById(@Param('id') id: string): Promise<BookSection> {
+    async getBookSectionById(@Param('id', ParseUUIDPipe) id: string): Promise<BookSection> {
         return await this.bookSectionService.findById(id, true);
     }
 
@@ -57,7 +57,7 @@ export class BookSectionController {
         description: 'Book Section Not Found'
     })
     async updateBookSection(
-        @Param('id') id: string,
+        @Param('id', ParseUUIDPipe) id: string,
         @Body() updateDto: UpdateBookSectionDto
     ) {
         await this.bookSectionService.update(id, updateDto);
@@ -71,7 +71,7 @@ export class BookSectionController {
     @ApiNotFoundResponse({
         description: 'Book Section Not Found'
     })
-    async removeBookSection(@Param('id') id: string) {
+    async removeBookSection(@Param('id', ParseUUIDPipe) id: string) {
         await this.bookSectionService.remove(id);
     }
 }

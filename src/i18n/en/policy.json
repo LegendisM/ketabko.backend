@@ -1,5 +1,6 @@
 {
     "order-forbidden": "You are not allowed to access this order",
-    "payment-forbidden": "You are not authorized to access this Payment",
-    "comment-forbidden": "You are not allowed to access this comment"
+    "payment-forbidden": "You are not authorized to access this payment",
+    "comment-forbidden": "You are not allowed to access this comment",
+    "book-section-document-forbidden": "You are not allowed to access this document"
 }

@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseUUIDPipe, Post, Query } from '@nestjs/common';
 import { ApiConflictResponse, ApiCreatedResponse, ApiForbiddenResponse, ApiNotFoundResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { OrderService } from './order.service';
 import { IPagination } from 'src/common/interface/pagination.interface';
@@ -53,7 +53,7 @@ export class OrderController {
         description: 'Invalid User Policy Access'
     })
     async getOrderById(
-        @Param('id') id: string,
+        @Param('id', ParseUUIDPipe) id: string,
         @CurrentUser() user: User
     ): Promise<Order> {
         const order = await this.orderService.findById(id, true);
@@ -86,7 +86,7 @@ export class OrderController {
     @ApiNotFoundResponse({
         description: 'Order Not Found'
     })
-    async removeOrder(@Param('id') id: string) {
+    async removeOrder(@Param('id', ParseUUIDPipe) id: string) {
         await this.orderService.remove(id);
     }
 }
