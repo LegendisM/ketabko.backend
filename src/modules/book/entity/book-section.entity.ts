@@ -1,8 +1,7 @@
-import { StorageFile } from "src/modules/storage/entity/storage-file.entity";
 import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Book } from "./book.entity";
 import { BookField } from "../class/book-field.class";
-import { BookSectionData } from "./book-section-data.entity";
+import { BookSectionDocument } from "./book-section-document.entity";
 
 @Entity()
 export class BookSection {
@@ -21,8 +20,8 @@ export class BookSection {
     })
     fields: BookField[];
 
-    @OneToMany(() => BookSectionData, (sectionData) => sectionData.section)
-    datas: BookSectionData[];
+    @OneToMany(() => BookSectionDocument, (sectionDocument) => sectionDocument.section)
+    documents: BookSectionDocument[];
 
     @ManyToOne(() => Book, (book) => book.sections, { onDelete: 'CASCADE' })
     book: Book;

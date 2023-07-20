@@ -1,6 +1,6 @@
 import { InferSubjects } from "@casl/ability";
 import { Author } from "src/modules/author/entity/author.entity";
-import { BookSectionData } from "src/modules/book/entity/book-section-data.entity";
+import { BookSectionData } from "src/modules/book/entity/book-section-document.entity";
 import { Book } from "src/modules/book/entity/book.entity";
 import { Category } from "src/modules/category/entity/category.entity";
 import { Order } from "src/modules/order/entity/order.entity";

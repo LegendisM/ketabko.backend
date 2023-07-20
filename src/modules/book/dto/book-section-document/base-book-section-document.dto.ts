@@ -1,7 +1,7 @@
 import { IsString, IsUUID } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
 
-export class BaseBookSectionDataDto {
+export class BaseBookSectionDocumentDto {
     @ApiProperty()
     @IsUUID()
     id: string;

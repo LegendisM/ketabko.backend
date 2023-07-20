@@ -7,9 +7,9 @@ import { BookSection } from '../entity/book-section.entity';
 import { CreateBookSectionDto } from '../dto/book-section/create-book-section.dto';
 import { UpdateBookSectionDto } from '../dto/book-section/update-book-section.dto';
 
-@ApiTags('Books Sections')
+@ApiTags('Book Sections')
 @Controller({
-    path: '/books-sections',
+    path: '/book-sections',
     version: '1'
 })
 export class BookSectionController {

@@ -3,7 +3,7 @@ import { BookSection } from "./book-section.entity";
 import { User } from "src/modules/user/entity/user.entity";
 
 @Entity()
-export class BookSectionData {
+export class BookSectionDocument {
     @PrimaryGeneratedColumn()
     id: string;
 
@@ -18,9 +18,9 @@ export class BookSectionData {
     @CreateDateColumn()
     createdAt: Date;
 
-    @ManyToOne(() => BookSection, (section) => section.datas, { onDelete: 'CASCADE' })
+    @ManyToOne(() => BookSection, (section) => section.documents, { onDelete: 'CASCADE' })
     section: BookSection;
 
-    @ManyToOne(() => User, (user) => user.bookSectionDatas, { onDelete: 'CASCADE' })
+    @ManyToOne(() => User, (user) => user.bookSectionDocuments, { onDelete: 'CASCADE' })
     user: User;
 }
