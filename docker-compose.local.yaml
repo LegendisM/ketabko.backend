@@ -1,0 +1,33 @@
+version: '3.9'
+
+services:
+  main:
+    container_name: ketabko_main
+    build:
+      context: .
+      target: development
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    ports:
+      - "${MAIN_PORT}:${MAIN_PORT}"
+    volumes:
+      - uploads:/usr/src/app/public/uploads
+  primary_db:
+    container_name: ketabko_primary_db
+    image: postgres
+    environment:
+      - POSTGRES_USER=${PRIMARY_DB_USERNAME}
+      - POSTGRES_PASSWORD=${PRIMARY_DB_PASSWORD}
+      - POSTGRES_DB=${PRIMARY_DB_NAME}
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    ports:
+      - "${PRIMARY_DB_PORT}:5432"
+    volumes:
+      - primary_db_data:/var/lib/postgresql/data
+
+volumes:
+  primary_db_data:
+    driver: local
+  uploads:
+    driver: local

@@ -30,11 +30,11 @@ import { PaymentModule } from '../payment/payment.module';
     TypeOrmModule.forRootAsync({
       useFactory: async (configService: ConfigService) => ({
         type: 'postgres',
-        host: configService.get('POSTGRES_HOST'),
-        port: +configService.get('POSTGRES_PORT'),
-        database: configService.get('POSTGRES_DB'),
-        username: configService.get('POSTGRES_USERNAME'),
-        password: configService.get('POSTGRES_PASSWORD'),
+        host: configService.get('PRIMARY_DB_HOST'),
+        port: +configService.get('PRIMARY_DB_PORT'),
+        database: configService.get('PRIMARY_DB_NAME'),
+        username: configService.get('PRIMARY_DB_USERNAME'),
+        password: configService.get('PRIMARY_DB_PASSWORD'),
         entities: [`${__dirname}/../**/*.entity{.ts,.js}`],
         synchronize: configService.get('NODE_ENV') != 'production'
       }),
