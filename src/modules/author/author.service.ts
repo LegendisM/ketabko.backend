@@ -2,7 +2,7 @@ import _ from 'lodash';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Author } from './entity/author.entity';
-import { Like, Repository } from 'typeorm';
+import { FindOptionsWhere, Like, Repository } from 'typeorm';
 import { CreateAuthorDto } from './dto/create-author.dto';
 import { StorageService } from '../storage/storage.service';
 import { IPagination } from 'src/common/interface/pagination.interface';
@@ -23,19 +23,20 @@ export class AuthorService {
     }
 
     async findAll({ name, description, limit, page }: FindAuthorsDto): Promise<IPagination<Author>> {
+        const where: FindOptionsWhere<Author>[] = [
+            (name) ?
+                { name: Like(`%${name}%`) }
+                : null,
+            (description) ?
+                { description: Like(`%${description}%`) }
+                : null,
+        ];
         const authors = await this.authorRepository.find({
-            where: [
-                (name) ?
-                    { name: Like(`%${name}%`) }
-                    : null,
-                (description) ?
-                    { description: Like(`%${description}%`) }
-                    : null,
-            ],
+            where: where,
             skip: (page - 1) * limit,
             take: limit - 1
         });
-        const authorsCount = await this.authorRepository.count();
+        const authorsCount = await this.authorRepository.count({ where });
         return {
             items: authors,
             limit: limit,

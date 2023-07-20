@@ -1,11 +1,11 @@
-import { Controller, Get, Post, Patch, Delete, Param, Body, Query } from '@nestjs/common';
-import { BookService } from './book.service';
+import { Controller, Get, Post, Put, Delete, Param, Body, Query, ParseUUIDPipe } from '@nestjs/common';
+import { BookService } from './../service/book.service';
 import { ApiCreatedResponse, ApiNotFoundResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
-import { FindBooksDto } from './dto/find-book.dto';
+import { FindBooksDto } from './../dto/book/find-book.dto';
 import { IPagination } from 'src/common/interface/pagination.interface';
-import { Book } from './entity/book.entity';
-import { CreateBookDto } from './dto/create-book.dto';
-import { UpdateBookDto } from './dto/update-book.dto';
+import { Book } from '../entity/book.entity';
+import { CreateBookDto } from './../dto/book/create-book.dto';
+import { UpdateBookDto } from './../dto/book/update-book.dto';
 import { Roles } from 'src/modules/user/decorator/role.decorator';
 import { Role } from 'src/modules/user/interface/role.interface';
 
@@ -34,7 +34,7 @@ export class BookController {
     @ApiNotFoundResponse({
         description: 'Book Not Found'
     })
-    async getBookById(@Param('id') id: string): Promise<Book> {
+    async getBookById(@Param('id', ParseUUIDPipe) id: string): Promise<Book> {
         return await this.bookService.findById(id, true);
     }
 
@@ -59,7 +59,7 @@ export class BookController {
         description: 'Book|Cover|Audio Not Found'
     })
     async updateBook(
-        @Param('id') id: string,
+        @Param('id', ParseUUIDPipe) id: string,
         @Body() updateDto: UpdateBookDto
     ) {
         await this.bookService.update(id, updateDto);
@@ -73,7 +73,7 @@ export class BookController {
     @ApiNotFoundResponse({
         description: 'Book Not Found'
     })
-    async removeBook(@Param('id') id: string) {
+    async removeBook(@Param('id', ParseUUIDPipe) id: string) {
         await this.bookService.remove(id);
     }
 }

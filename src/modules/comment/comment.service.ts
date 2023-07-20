@@ -1,8 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { BookService } from '../book/book.service';
+import { BookService } from '../book/service/book.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Comment } from './entity/comment.entity';
-import { Repository } from 'typeorm';
+import { FindOptionsWhere, Repository } from 'typeorm';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { CommentableType } from './interface/comment.interface';
 import { IPagination } from 'src/common/interface/pagination.interface';
@@ -23,22 +23,23 @@ export class CommentService {
     }
 
     async findAll({ entityType, entityId, user, limit, page }: FindCommentsDto): Promise<IPagination<Comment>> {
+        const where: FindOptionsWhere<Comment>[] = [
+            (entityType) ?
+                { entityType }
+                : null,
+            (entityId) ?
+                { entityId }
+                : null,
+            (user) ?
+                { user: { id: user } }
+                : null
+        ];
         const comments = await this.commentRepository.find({
-            where: [
-                (entityType) ?
-                    { entityType }
-                    : null,
-                (entityId) ?
-                    { entityId }
-                    : null,
-                (user) ?
-                    { user: { id: user } }
-                    : null
-            ],
+            where: where,
             skip: (page - 1) * limit,
             take: limit - 1
         });
-        const commentsCount = await this.commentRepository.count();
+        const commentsCount = await this.commentRepository.count({ where });
         return {
             items: comments,
             limit: limit,

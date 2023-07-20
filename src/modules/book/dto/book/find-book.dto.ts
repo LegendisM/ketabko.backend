@@ -37,4 +37,12 @@ export class FindBooksDto extends IntersectionType(PaginationDto) {
     @IsNumber()
     @IsOptional()
     maxPrice?: number;
+
+    @ApiProperty({
+        required: false,
+        description: 'Filter By Category'
+    })
+    @IsString()
+    @IsOptional()
+    category: string;
 }

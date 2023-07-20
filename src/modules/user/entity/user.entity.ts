@@ -5,6 +5,7 @@ import { Comment } from "src/modules/comment/entity/comment.entity";
 import { StorageFile } from "src/modules/storage/entity/storage-file.entity";
 import { Exclude } from "class-transformer";
 import { Payment } from "src/modules/payment/entity/payment.entity";
+import { BookSectionDocument } from "src/modules/book/entity/book-section-document.entity";
 
 @Entity()
 export class User {
@@ -51,4 +52,7 @@ export class User {
 
     @OneToMany(() => Payment, (payment) => payment.user)
     payments: Payment[];
+
+    @OneToMany(() => BookSectionDocument, (bookSectionDocument) => bookSectionDocument.user)
+    bookSectionDocuments: BookSectionDocument[];
 }

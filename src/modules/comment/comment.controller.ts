@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Delete, Query, Body, Param } from '@nestjs/common';
+import { Controller, Get, Post, Delete, Query, Body, Param, ParseUUIDPipe } from '@nestjs/common';
 import { ApiForbiddenResponse, ApiNotFoundResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { CommentService } from './comment.service';
 import { FindCommentsDto } from './dto/find-comment.dto';
@@ -37,7 +37,7 @@ export class CommentController {
     @ApiNotFoundResponse({
         description: 'Comment Not Found'
     })
-    async getCommentById(@Param('id') id: string): Promise<Comment> {
+    async getCommentById(@Param('id', ParseUUIDPipe) id: string): Promise<Comment> {
         return await this.commentService.findById(id, true);
     }
 
@@ -67,7 +67,7 @@ export class CommentController {
     @ApiForbiddenResponse({
         description: 'Invalid User Policy Access'
     })
-    async removeComment(@Param('id') id: string, @CurrentUser() user: User) {
+    async removeComment(@Param('id', ParseUUIDPipe) id: string, @CurrentUser() user: User) {
         const comment = await this.commentService.findById(id, true);
         this.policyService.forComment(PolicyAction.Delete, user, comment, true);
         return await this.commentService.remove(id);

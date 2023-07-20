@@ -1,6 +1,6 @@
 import { ConflictException, Injectable, OnModuleInit } from "@nestjs/common";
 import { Payment } from "../../entity/payment.entity";
-import { PaymentDriver } from "../../classes/payment-driver.class";
+import { PaymentDriver } from "../../class/payment-driver.class";
 import { IPaymentRequest, IPaymentVerify, PaymentStatus } from "../../interface/payment.interface";
 import { HttpService } from "@nestjs/axios";
 import { ConfigService } from "@nestjs/config";

@@ -5,6 +5,7 @@ import { PolicyAction } from './interface/policy.interface';
 import { User } from '../user/entity/user.entity';
 import { Comment } from '../comment/entity/comment.entity';
 import { Payment } from '../payment/entity/payment.entity';
+import { BookSectionDocument } from '../book/entity/book-section-document.entity';
 
 @Injectable()
 export class PolicyService {
@@ -48,6 +49,19 @@ export class PolicyService {
         const state = this.policyFactory.userAbility(user).can(action, comment);
         if (exception && !state) {
             throw new ForbiddenException('policy.comment-forbidden');
+        }
+        return state;
+    }
+
+    forBookSectionDocument(
+        action: PolicyAction,
+        user: User,
+        document: BookSectionDocument,
+        exception: boolean
+    ): boolean {
+        const state = this.policyFactory.userAbility(user).can(action, document);
+        if (exception && !state) {
+            throw new ForbiddenException(`policy.book-section-document-forbidden`);
         }
         return state;
     }

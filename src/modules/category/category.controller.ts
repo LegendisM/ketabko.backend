@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Patch, Delete, Query, Param, Body } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Query, Param, Body, ParseUUIDPipe } from '@nestjs/common';
 import { ApiConflictResponse, ApiCreatedResponse, ApiNotFoundResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { CategoryService } from './category.service';
 import { FindCategoriesDto } from './dto/find-category.dto';
@@ -34,7 +34,7 @@ export class CategoryController {
     @ApiNotFoundResponse({
         description: 'Category Not Found'
     })
-    async getCategoryById(@Param('id') id: string): Promise<Category> {
+    async getCategoryById(@Param('id', ParseUUIDPipe) id: string): Promise<Category> {
         return this.categoryService.findById(id);
     }
 
@@ -59,7 +59,7 @@ export class CategoryController {
         description: 'Category Not Found'
     })
     async updateCategory(
-        @Param('id') id: string,
+        @Param('id', ParseUUIDPipe) id: string,
         @Body() updateDto: UpdateCategoryDto
     ) {
         return await this.categoryService.update(id, updateDto);
@@ -73,7 +73,7 @@ export class CategoryController {
     @ApiNotFoundResponse({
         description: 'Category Not Found'
     })
-    async removeCategory(@Param('id') id: string) {
+    async removeCategory(@Param('id', ParseUUIDPipe) id: string) {
         return await this.categoryService.remove(id);
     }
 }

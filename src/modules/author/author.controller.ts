@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Patch, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseUUIDPipe, Post, Put, Query } from '@nestjs/common';
 import { ApiCreatedResponse, ApiNotFoundResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { AuthorService } from './author.service';
 import { IPagination } from 'src/common/interface/pagination.interface';
@@ -34,7 +34,7 @@ export class AuthorController {
     @ApiNotFoundResponse({
         description: 'Author Not Found'
     })
-    async getAuthorById(@Param('id') id: string): Promise<Author> {
+    async getAuthorById(@Param('id', ParseUUIDPipe) id: string): Promise<Author> {
         return await this.authorService.findById(id, true);
     }
 
@@ -59,7 +59,7 @@ export class AuthorController {
         description: 'Author|Avatar(StorageFile) Not Found'
     })
     async updateAuthor(
-        @Param('id') id: string,
+        @Param('id', ParseUUIDPipe) id: string,
         @Body() updateDto: UpdateAuthorDto
     ) {
         await this.authorService.update(id, updateDto);
@@ -73,7 +73,7 @@ export class AuthorController {
     @ApiNotFoundResponse({
         description: 'Author Not Found'
     })
-    async removeAuthor(@Param('id') id: string) {
+    async removeAuthor(@Param('id', ParseUUIDPipe) id: string) {
         await this.authorService.remove(id);
     }
 }

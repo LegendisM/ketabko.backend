@@ -4,7 +4,7 @@ import { Order } from './entity/order.entity';
 import { Repository } from 'typeorm';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { OrderStatus, OrderableType } from './interface/order.interface';
-import { BookService } from '../book/book.service';
+import { BookService } from '../book/service/book.service';
 import { User } from '../user/entity/user.entity';
 import { IPagination } from 'src/common/interface/pagination.interface';
 import { PaginationDto } from 'src/common/dto/pagination.dto';

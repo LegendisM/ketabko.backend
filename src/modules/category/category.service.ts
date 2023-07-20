@@ -1,7 +1,7 @@
 import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Category } from './entity/category.entity';
-import { Like, Repository } from 'typeorm';
+import { FindOptionsWhere, Like, Repository } from 'typeorm';
 import { IPagination } from 'src/common/interface/pagination.interface';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { FindCategoriesDto } from './dto/find-category.dto';
@@ -20,16 +20,17 @@ export class CategoryService {
     }
 
     async findAll({ name, limit, page }: FindCategoriesDto): Promise<IPagination<Category>> {
+        const where: FindOptionsWhere<Category>[] = [
+            (name) ?
+                { name: Like(`%${name}%`) }
+                : null
+        ];
         const categories = await this.categoryRepository.find({
-            where: [
-                (name) ?
-                    { name: Like(`%${name}%`) }
-                    : null
-            ],
+            where: where,
             skip: (page - 1) * limit,
             take: limit - 1
         });
-        const categoriesCount = await this.categoryRepository.count();
+        const categoriesCount = await this.categoryRepository.count({ where });
         return {
             items: categories,
             limit: limit,
