@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Put, Delete, Param, Body, ParseUUIDPipe } from '@nestjs/common';
+import { Controller, Get, Post, Patch, Delete, Param, Body, ParseUUIDPipe } from '@nestjs/common';
 import { ApiCreatedResponse, ApiNotFoundResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { Roles } from 'src/modules/user/decorator/role.decorator';
 import { Role } from 'src/modules/user/interface/role.interface';
@@ -48,7 +48,7 @@ export class BookSectionController {
         return await this.bookSectionService.create(createDto);
     }
 
-    @Put('/:id')
+    @Patch('/:id')
     @Roles(Role.Admin)
     @ApiOkResponse({
         description: 'Book Section Updated Successfully'

@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Put, Delete, Query, Param, Body, ParseUUIDPipe } from '@nestjs/common';
+import { Controller, Get, Post, Patch, Delete, Query, Param, Body, ParseUUIDPipe } from '@nestjs/common';
 import { ApiConflictResponse, ApiCreatedResponse, ApiNotFoundResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { CategoryService } from './category.service';
 import { FindCategoriesDto } from './dto/find-category.dto';
@@ -50,7 +50,7 @@ export class CategoryController {
         return await this.categoryService.create(createDto);
     }
 
-    @Put('/:id')
+    @Patch('/:id')
     @Roles(Role.Admin)
     @ApiOkResponse({
         description: 'Category Updated Successfully'
