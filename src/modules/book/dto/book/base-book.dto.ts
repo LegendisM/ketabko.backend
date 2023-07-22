@@ -20,7 +20,7 @@ export class BaseBookDto {
         maxLength: 255
     })
     @IsString()
-    @Length(1, 255)
+    @Length(1, 500)
     description: string;
 
     @ApiProperty({
@@ -33,6 +33,12 @@ export class BaseBookDto {
     @Max(5000000)
     price: number;
 
+    @ApiProperty({
+        description: 'UUID Of the Author'
+    })
+    @IsUUID()
+    author: string;
+    
     @ApiProperty({
         description: 'UUID Of the StorageFile for Cover Image'
     })

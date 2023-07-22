@@ -33,7 +33,7 @@ export class CommentService {
             (user) ?
                 { user: { id: user } }
                 : null
-        ];
+        ].filter(condition => !!condition);
         const comments = await this.commentRepository.find({
             where: where,
             skip: (page - 1) * limit,

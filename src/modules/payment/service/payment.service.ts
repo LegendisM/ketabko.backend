@@ -31,7 +31,7 @@ export class PaymentService {
             (user) ?
                 { user: { id: user } }
                 : null
-        ];
+        ].filter(condition => !!condition);
         const payments = await this.paymentRepository.find({
             where: where,
             skip: (page - 1) * limit,

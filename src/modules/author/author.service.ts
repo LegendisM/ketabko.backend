@@ -30,7 +30,7 @@ export class AuthorService {
             (description) ?
                 { description: Like(`%${description}%`) }
                 : null,
-        ];
+        ].filter(condition => !!condition);
         const authors = await this.authorRepository.find({
             where: where,
             skip: (page - 1) * limit,

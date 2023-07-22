@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Patch, Delete, Param, Body, Patch, ParseUUIDPipe, Query } from '@nestjs/common';
+import { Controller, Get, Post, Delete, Param, Body, Patch, ParseUUIDPipe, Query } from '@nestjs/common';
 import { ApiCreatedResponse, ApiNotFoundResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { BookSectionDocumentService } from '../service/book-section-document.service';
 import { Roles } from 'src/modules/user/decorator/role.decorator';

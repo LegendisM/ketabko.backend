@@ -10,11 +10,13 @@ import { BookSectionService } from './service/book-section.service';
 import { BookSectionDocumentService } from './service/book-section-document.service';
 import { BookSectionController } from './controller/book-section.controller';
 import { BookSectionDocumentController } from './controller/book-section-document.controller';
+import { AuthorModule } from '../author/author.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Book, BookSection, BookSectionDocument]),
-    StorageModule
+    StorageModule,
+    AuthorModule
   ],
   controllers: [BookController, BookSectionController, BookSectionDocumentController],
   providers: [BookService, BookSectionService, BookSectionDocumentService],
