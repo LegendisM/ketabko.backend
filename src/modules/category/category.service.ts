@@ -24,7 +24,7 @@ export class CategoryService {
             (name) ?
                 { name: Like(`%${name}%`) }
                 : null
-        ];
+        ].filter(condition => !!condition);
         const categories = await this.categoryRepository.find({
             where: where,
             skip: (page - 1) * limit,

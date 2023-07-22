@@ -9,16 +9,19 @@ import { UpdateBookDto } from '../dto/book/update-book.dto';
 import { FindBooksDto } from '../dto/book/find-book.dto';
 import { IPagination } from 'src/common/interface/pagination.interface';
 import { StorageService } from '../../storage/storage.service';
+import { AuthorService } from 'src/modules/author/author.service';
 
 @Injectable()
 export class BookService {
     constructor(
         @InjectRepository(Book) private bookRepository: Repository<Book>,
+        private authorService: AuthorService,
         private storageService: StorageService
     ) { }
 
     async create(createDto: CreateBookDto): Promise<Book> {
-        const book = this.bookRepository.create(_.omit(createDto, ['cover', 'audio']));
+        const book = this.bookRepository.create(_.omit(createDto, ['author', 'cover', 'audio']));
+        book.author = await this.authorService.findById(createDto.author, true);
         book.cover = await this.storageService.findById(createDto.cover, true);
         book.audio = await this.storageService.findById(createDto.audio, true);
         return await this.bookRepository.save(book);
@@ -38,11 +41,11 @@ export class BookService {
             (category) ?
                 { categories: { slug: slugify(category) } }
                 : null
-        ];
+        ].filter(condition => !!condition);
         const books = await this.bookRepository.find({
             where: where,
             skip: (page - 1) * limit,
-            take: limit - 1
+            take: limit
         });
         const booksCount = await this.bookRepository.count({ where });
         return {

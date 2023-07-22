@@ -28,7 +28,7 @@ export class BookSectionDocumentService {
         const where: FindOptionsWhere<BookSectionDocument>[] = [
             (section) ? { section: { id: section } } : null,
             (user) ? { user: { id: user } } : null
-        ];
+        ].filter(condition => !!condition);
         const documents = await this.bookSectionDocumentRepository.find({
             where: where,
             skip: (page - 1) * limit,
