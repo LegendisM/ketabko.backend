@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, OneToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Role } from "../interface/role.interface";
 import { Order } from "src/modules/order/entity/order.entity";
 import { Comment } from "src/modules/comment/entity/comment.entity";
@@ -37,7 +37,7 @@ export class User {
     })
     roles: Role[];
 
-    @OneToOne(() => StorageFile, (storageFile) => storageFile.id, { eager: true, onDelete: 'SET NULL' })
+    @ManyToOne(() => StorageFile, (storageFile) => storageFile.id, { eager: true, onDelete: 'SET NULL' })
     @JoinColumn()
     avatar: StorageFile;
 
