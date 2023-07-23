@@ -1,7 +1,7 @@
 import { Author } from "src/modules/author/entity/author.entity";
 import { Category } from "src/modules/category/entity/category.entity";
 import { StorageFile } from "src/modules/storage/entity/storage-file.entity";
-import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, JoinTable, ManyToMany, OneToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { BookSection } from "./book-section.entity";
 
 @Entity()
@@ -18,11 +18,11 @@ export class Book {
     @Column()
     price: number;
 
-    @OneToOne(() => StorageFile, (storageFile) => storageFile.id, { eager: true, onDelete: 'SET NULL' })
+    @ManyToOne(() => StorageFile, (storageFile) => storageFile.id, { eager: true, onDelete: 'SET NULL' })
     @JoinColumn()
     cover: StorageFile;
 
-    @OneToOne(() => StorageFile, (storageFile) => storageFile.id, { eager: true, onDelete: 'SET NULL' })
+    @ManyToOne(() => StorageFile, (storageFile) => storageFile.id, { eager: true, onDelete: 'SET NULL' })
     @JoinColumn()
     audio: StorageFile;
 

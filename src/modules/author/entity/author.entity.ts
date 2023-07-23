@@ -1,6 +1,6 @@
 import { Book } from "src/modules/book/entity/book.entity";
 import { StorageFile } from "src/modules/storage/entity/storage-file.entity";
-import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class Author {
@@ -13,7 +13,7 @@ export class Author {
     @Column({ type: 'text' })
     description: string;
 
-    @OneToOne(() => StorageFile, (storageFile) => storageFile.id, { eager: true, onDelete: 'SET NULL' })
+    @ManyToOne(() => StorageFile, (storageFile) => storageFile.id, { eager: true, onDelete: 'SET NULL' })
     @JoinColumn()
     avatar: StorageFile;
 
