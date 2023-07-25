@@ -1,4 +1,4 @@
-import _ from "lodash";
+import _, { merge } from "lodash";
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { FindOptionsWhere, Repository } from "typeorm";
@@ -24,11 +24,12 @@ export class BookSectionDocumentService {
         return await this.bookSectionDocumentRepository.save(document);
     }
 
-    async findAll({ section, user, limit, page }: FindBookSectionDocumentsDto): Promise<IPagination<BookSectionDocument>> {
-        const where: FindOptionsWhere<BookSectionDocument>[] = [
+    async findAll({ section, user, limit, page }: FindBookSectionDocumentsDto, mergeCondition: boolean = false): Promise<IPagination<BookSectionDocument>> {
+        let where: FindOptionsWhere<BookSectionDocument>[] = [
             (section) ? { section: { id: section } } : null,
             (user) ? { user: { id: user } } : null
         ].filter(condition => !!condition);
+        where = mergeCondition ? [_.reduce(where, (previous, current) => _.merge(previous, current))] : where;
         const documents = await this.bookSectionDocumentRepository.find({
             where: where,
             skip: (page - 1) * limit,

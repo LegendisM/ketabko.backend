@@ -8,7 +8,11 @@ export class BookSectionDocument {
     @PrimaryGeneratedColumn()
     id: string;
 
-    @Column('simple-json', {
+    @Column()
+    title: string;
+
+    @Column({
+        type: 'simple-array',
         default: [],
         transformer: {
             from: (value) => JSON.parse(value),

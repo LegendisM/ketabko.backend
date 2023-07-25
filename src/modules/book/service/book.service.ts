@@ -27,8 +27,8 @@ export class BookService {
         return await this.bookRepository.save(book);
     }
 
-    async findAll({ title, description, minPrice, maxPrice, category, limit, page }: FindBooksDto): Promise<IPagination<Book>> {
-        const where: FindOptionsWhere<Book>[] = [
+    async findAll({ title, description, minPrice, maxPrice, category, limit, page }: FindBooksDto, mergeCondition: boolean = false): Promise<IPagination<Book>> {
+        let where: FindOptionsWhere<Book>[] = [
             (title) ?
                 { title: Like(`%${title}%`) }
                 : null,
@@ -42,6 +42,7 @@ export class BookService {
                 { categories: { slug: slugify(category) } }
                 : null
         ].filter(condition => !!condition);
+        where = mergeCondition ? [_.reduce(where, (previous, current) => _.merge(previous, current))] : where;
         const books = await this.bookRepository.find({
             where: where,
             skip: (page - 1) * limit,

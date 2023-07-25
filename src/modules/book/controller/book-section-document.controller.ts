@@ -44,7 +44,7 @@ export class BookSectionDocumentController {
         @Query() paginationDto: PaginationDto,
         @CurrentUser() user: User
     ): Promise<IPagination<BookSectionDocument>> {
-        return await this.bookSectionDocumentService.findAll({ user: user.id, ...paginationDto });
+        return await this.bookSectionDocumentService.findAll({ user: user.id, ...paginationDto }, true);
     }
 
     @Get('/me/section/:sectionId')
@@ -56,7 +56,7 @@ export class BookSectionDocumentController {
         @Query() paginationDto: PaginationDto,
         @CurrentUser() user: User
     ): Promise<IPagination<BookSectionDocument>> {
-        return await this.bookSectionDocumentService.findAll({ section: sectionId, user: user.id, ...paginationDto });
+        return await this.bookSectionDocumentService.findAll({ section: sectionId, user: user.id, ...paginationDto }, true);
     }
 
     @Get('/me/:id')

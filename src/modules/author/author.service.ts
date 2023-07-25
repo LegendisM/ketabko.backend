@@ -22,8 +22,8 @@ export class AuthorService {
         return await this.authorRepository.save(author);
     }
 
-    async findAll({ name, description, limit, page }: FindAuthorsDto): Promise<IPagination<Author>> {
-        const where: FindOptionsWhere<Author>[] = [
+    async findAll({ name, description, limit, page }: FindAuthorsDto, mergeCondition: boolean = false): Promise<IPagination<Author>> {
+        let where: FindOptionsWhere<Author>[] = [
             (name) ?
                 { name: Like(`%${name}%`) }
                 : null,
@@ -31,6 +31,7 @@ export class AuthorService {
                 { description: Like(`%${description}%`) }
                 : null,
         ].filter(condition => !!condition);
+        where = mergeCondition ? [_.reduce(where, (previous, current) => _.merge(previous, current))] : where;
         const authors = await this.authorRepository.find({
             where: where,
             skip: (page - 1) * limit,

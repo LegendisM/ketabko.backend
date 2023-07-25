@@ -27,7 +27,7 @@ export class StorageService {
         return await this.storageFileRepository.save(file);
     }
 
-    async findAll({ limit, page }: PaginationDto): Promise<IPagination<StorageFile>> {
+    async findAll({ limit, page }: PaginationDto, mergeCondition: boolean = false): Promise<IPagination<StorageFile>> {
         const files = await this.storageFileRepository.find({
             skip: (page - 1) * limit,
             take: limit - 1

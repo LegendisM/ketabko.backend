@@ -3,5 +3,5 @@ import { BaseBookSectionDocumentDto } from "./base-book-section-document.dto";
 
 export class CreateBookSectionDocumentDto extends PickType(
     BaseBookSectionDocumentDto,
-    ['values', 'section']
+    ['title', 'section']
 ) { }

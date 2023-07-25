@@ -8,6 +8,7 @@ import { IPagination } from 'src/common/interface/pagination.interface';
 import { FindPaymentsDto } from '../dto/find-payment.dto';
 import { CreatePaymentDto } from '../dto/create-payment.dto';
 import { PaymentDriverType } from '../interface/payment-driver.interface';
+import _ from 'lodash';
 
 @Injectable()
 export class PaymentService {
@@ -23,8 +24,8 @@ export class PaymentService {
         return await this.paymentRepository.save(payment);
     }
 
-    async findAll({ status, user, limit, page }: FindPaymentsDto): Promise<IPagination<Payment>> {
-        const where: FindOptionsWhere<Payment>[] = [
+    async findAll({ status, user, limit, page }: FindPaymentsDto, mergeCondition: boolean = false): Promise<IPagination<Payment>> {
+        let where: FindOptionsWhere<Payment>[] = [
             (status) ?
                 { status }
                 : null,
@@ -32,6 +33,7 @@ export class PaymentService {
                 { user: { id: user } }
                 : null
         ].filter(condition => !!condition);
+        where = mergeCondition ? [_.reduce(where, (previous, current) => _.merge(previous, current))] : where;
         const payments = await this.paymentRepository.find({
             where: where,
             skip: (page - 1) * limit,

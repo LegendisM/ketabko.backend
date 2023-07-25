@@ -8,6 +8,7 @@ import { CommentableType } from './interface/comment.interface';
 import { IPagination } from 'src/common/interface/pagination.interface';
 import { FindCommentsDto } from './dto/find-comment.dto';
 import { User } from '../user/entity/user.entity';
+import _ from 'lodash';
 
 @Injectable()
 export class CommentService {
@@ -22,8 +23,8 @@ export class CommentService {
         return await this.commentRepository.save(comment);
     }
 
-    async findAll({ entityType, entityId, user, limit, page }: FindCommentsDto): Promise<IPagination<Comment>> {
-        const where: FindOptionsWhere<Comment>[] = [
+    async findAll({ entityType, entityId, user, limit, page }: FindCommentsDto, mergeCondition: boolean = false): Promise<IPagination<Comment>> {
+        let where: FindOptionsWhere<Comment>[] = [
             (entityType) ?
                 { entityType }
                 : null,
@@ -34,6 +35,7 @@ export class CommentService {
                 { user: { id: user } }
                 : null
         ].filter(condition => !!condition);
+        where = mergeCondition ? [_.reduce(where, (previous, current) => _.merge(previous, current))] : where;
         const comments = await this.commentRepository.find({
             where: where,
             skip: (page - 1) * limit,

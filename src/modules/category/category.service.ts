@@ -6,6 +6,7 @@ import { IPagination } from 'src/common/interface/pagination.interface';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { FindCategoriesDto } from './dto/find-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
+import _ from 'lodash';
 
 @Injectable()
 export class CategoryService {
@@ -19,12 +20,13 @@ export class CategoryService {
         return await this.categoryRepository.save(category);
     }
 
-    async findAll({ name, limit, page }: FindCategoriesDto): Promise<IPagination<Category>> {
-        const where: FindOptionsWhere<Category>[] = [
+    async findAll({ name, limit, page }: FindCategoriesDto, mergeCondition: boolean = false): Promise<IPagination<Category>> {
+        let where: FindOptionsWhere<Category>[] = [
             (name) ?
                 { name: Like(`%${name}%`) }
                 : null
         ].filter(condition => !!condition);
+        where = mergeCondition ? [_.reduce(where, (previous, current) => _.merge(previous, current))] : where;
         const categories = await this.categoryRepository.find({
             where: where,
             skip: (page - 1) * limit,

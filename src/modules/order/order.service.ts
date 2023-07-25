@@ -23,7 +23,7 @@ export class OrderService {
         return await this.orderRepository.save(order);
     }
 
-    async findAll({ limit, page }: PaginationDto): Promise<IPagination<Order>> {
+    async findAll({ limit, page }: PaginationDto, mergeCondition: boolean = false): Promise<IPagination<Order>> {
         const orders = await this.orderRepository.find({
             skip: (page - 1) * limit,
             take: limit - 1

@@ -11,7 +11,8 @@ export class BookSection {
     @Column()
     title: string;
 
-    @Column('simple-json', {
+    @Column({
+        type:'simple-array',
         default: [],
         transformer: {
             from: (value) => JSON.parse(value),
