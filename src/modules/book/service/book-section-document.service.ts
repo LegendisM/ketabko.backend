@@ -32,8 +32,9 @@ export class BookSectionDocumentService {
         where = mergeCondition ? [_.reduce(where, (previous, current) => _.merge(previous, current))] : where;
         const documents = await this.bookSectionDocumentRepository.find({
             where: where,
+            order: { createdAt: 'DESC' },
             skip: (page - 1) * limit,
-            take: limit
+            take: limit,
         });
         const documentCount = await this.bookSectionDocumentRepository.count({ where });
         return {
