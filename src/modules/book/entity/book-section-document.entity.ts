@@ -5,14 +5,13 @@ import { BookSectionFieldValue } from "../class/book-section-field-value.class";
 
 @Entity()
 export class BookSectionDocument {
-    @PrimaryGeneratedColumn()
+    @PrimaryGeneratedColumn('uuid')
     id: string;
 
     @Column()
     title: string;
 
-    @Column({
-        type: 'simple-array',
+    @Column('simple-array', {
         default: [],
         transformer: {
             from: (value) => JSON.parse(value),
@@ -24,7 +23,7 @@ export class BookSectionDocument {
     @CreateDateColumn()
     createdAt: Date;
 
-    @ManyToOne(() => BookSection, (section) => section.documents, { onDelete: 'CASCADE' })
+    @ManyToOne(() => BookSection, (section) => section.documents, { eager: true, onDelete: 'CASCADE' })
     section: BookSection;
 
     @ManyToOne(() => User, (user) => user.bookSectionDocuments, { onDelete: 'CASCADE' })

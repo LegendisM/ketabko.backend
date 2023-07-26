@@ -2,6 +2,7 @@ import { IsDate, IsNotEmpty, IsString, IsUUID, Length, ValidateNested } from "cl
 import { ApiProperty } from "@nestjs/swagger";
 import { BookSectionFieldValue } from "../../class/book-section-field-value.class";
 import { Type } from "class-transformer";
+import { BaseBookSectionFieldValueDto } from "../book-section-field-value/base-book-section-field-value.dto";
 
 export class BaseBookSectionDocumentDto {
     @ApiProperty()
@@ -18,10 +19,10 @@ export class BaseBookSectionDocumentDto {
     title: string;
 
     @ApiProperty({
-        type: [BookSectionFieldValue]
+        type: [BaseBookSectionFieldValueDto]
     })
     @ValidateNested({ each: true })
-    @Type(() => BookSectionFieldValue)
+    @Type(() => BaseBookSectionFieldValueDto)
     values: BookSectionFieldValue[];
 
     @ApiProperty()
