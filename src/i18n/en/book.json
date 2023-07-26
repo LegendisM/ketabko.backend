@@ -1,5 +1,5 @@
 {
     "invalid-id": "Book with this ID not found",
     "invalid-section-id": "The section for this book with this id was not found",
-    "invalid-section-data-id": "No information was found for this section of the book with this id"
+    "invalid-section-document-id": "No document was found for this section of the book with this id"
 }

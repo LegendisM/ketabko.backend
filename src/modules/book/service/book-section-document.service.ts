@@ -46,21 +46,21 @@ export class BookSectionDocumentService {
     }
 
     async findById(id: string, exception: boolean = false): Promise<BookSectionDocument> {
-        const section = await this.bookSectionDocumentRepository.findOneBy({ id });
-        if (exception && !section) {
+        const document = await this.bookSectionDocumentRepository.findOneBy({ id });
+        if (exception && !document) {
             throw new NotFoundException('book.invalid-section-document-id');
         }
-        return section;
+        return document;
     }
 
     async update(id: string, updateDto: UpdateBookSectionDocumentDto): Promise<BookSectionDocument> {
-        const section = await this.findById(id, true);
-        Object.assign(section, updateDto);
-        return await this.bookSectionDocumentRepository.save(section);
+        const document = await this.findById(id, true);
+        Object.assign(document, updateDto);
+        return await this.bookSectionDocumentRepository.save(document);
     }
 
     async remove(id: string): Promise<BookSectionDocument> {
-        const section = await this.findById(id, true);
-        return await this.bookSectionDocumentRepository.remove(section);
+        const document = await this.findById(id, true);
+        return await this.bookSectionDocumentRepository.remove(document);
     }
 }
