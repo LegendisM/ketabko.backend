@@ -1,5 +1,5 @@
 import { User } from "src/modules/user/entity/user.entity";
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn, RelationId } from "typeorm";
 import { CommentableType } from "../interface/comment.interface";
 
 @Entity()
@@ -25,4 +25,7 @@ export class Comment {
 
     @ManyToOne(() => User, (user) => user.comments, { onDelete: 'CASCADE' })
     user: User;
+
+    @RelationId((comment: Comment) => comment.user)
+    userId: string;
 }

@@ -66,8 +66,10 @@ export class BookSectionDocumentController {
     @ApiNotFoundResponse({
         description: 'Document Not Found'
     })
-    async getDocumentById(@Param('id', ParseUUIDPipe) id: string): Promise<BookSectionDocument> {
-        return await this.bookSectionDocumentService.findById(id, true);
+    async getDocumentById(@Param('id', ParseUUIDPipe) id: string, @CurrentUser() user: User): Promise<BookSectionDocument> {
+        const document = await this.bookSectionDocumentService.findById(id, true);
+        this.policyService.forBookSectionDocument(PolicyAction.Read, user, document, true);
+        return document;
     }
 
     @Post('/me')
@@ -113,7 +115,7 @@ export class BookSectionDocumentController {
         @CurrentUser() user: User
     ) {
         const document = await this.bookSectionDocumentService.findById(id, true);
-        this.policyService.forBookSectionDocument(PolicyAction.Update, user, document, true);
+        this.policyService.forBookSectionDocument(PolicyAction.Delete, user, document, true);
         return await this.bookSectionDocumentService.remove(id);
     }
 }

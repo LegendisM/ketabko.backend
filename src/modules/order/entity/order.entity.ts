@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, RelationId } from "typeorm";
 import { OrderStatus, OrderableType } from "../interface/order.interface";
 import { User } from "src/modules/user/entity/user.entity";
 import { Payment } from "src/modules/payment/entity/payment.entity";
@@ -36,4 +36,7 @@ export class Order {
 
     @ManyToOne(() => User, (user) => user.orders, { onDelete: 'CASCADE' })
     user: User;
+
+    @RelationId((order: Order) => order.user)
+    userId: string;
 }

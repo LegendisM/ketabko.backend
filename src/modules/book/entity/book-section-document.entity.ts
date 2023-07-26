@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, RelationId } from "typeorm";
 import { BookSection } from "./book-section.entity";
 import { User } from "src/modules/user/entity/user.entity";
 import { BookSectionFieldValue } from "../class/book-section-field-value.class";
@@ -28,4 +28,7 @@ export class BookSectionDocument {
 
     @ManyToOne(() => User, (user) => user.bookSectionDocuments, { onDelete: 'CASCADE' })
     user: User;
+
+    @RelationId((bookSectionDocument: BookSectionDocument) => bookSectionDocument.user)
+    userId: string;
 }
