@@ -4,19 +4,19 @@ import { AbilityBuilder, PureAbility, createMongoAbility } from "@casl/ability";
 import { PolicyAction, PolicySubjects } from "./interface/policy.interface";
 import { Role } from "../user/interface/role.interface";
 
+export type AppAbility = PureAbility<[PolicyAction, PolicySubjects]>;
+
 @Injectable()
 export class PolicyFactory {
     userAbility(user: User) {
-        const { can, build } = new AbilityBuilder<PureAbility<[PolicyAction, PolicySubjects]>>(
-            createMongoAbility
-        );
+        const { can, build } = new AbilityBuilder<AppAbility>(createMongoAbility);
 
         can(PolicyAction.Read, 'Comment');
-        can([PolicyAction.Delete], 'StorageFile', { 'user.id': user.id });
-        can([PolicyAction.Update, PolicyAction.Delete], 'Comment', { 'user.id': user.id });
-        can([PolicyAction.Read, PolicyAction.Update], 'Order', { 'user.id': user.id });
-        can([PolicyAction.Read, PolicyAction.Update], 'Payment', { 'user.id': user.id });
-        can([PolicyAction.Read, PolicyAction.Update, PolicyAction.Delete], 'BookSectionDocument', { 'user.id': user.id });
+        can([PolicyAction.Delete], 'StorageFile', { userId: user.id });
+        can([PolicyAction.Update, PolicyAction.Delete], 'Comment', { userId: user.id });
+        can([PolicyAction.Read, PolicyAction.Update], 'Order', { userId: user.id });
+        can([PolicyAction.Read, PolicyAction.Update], 'Payment', { userId: user.id });
+        can([PolicyAction.Read, PolicyAction.Update, PolicyAction.Delete], 'BookSectionDocument', { userId: user.id });
 
         if (user.roles.includes(Role.Moderator)) {
             can(PolicyAction.Manage, 'all');
