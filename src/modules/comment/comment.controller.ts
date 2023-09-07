@@ -2,11 +2,11 @@ import { Controller, Get, Post, Delete, Query, Body, Param, ParseUUIDPipe } from
 import { ApiForbiddenResponse, ApiNotFoundResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { CommentService } from './comment.service';
 import { FindCommentsDto } from './dto/find-comment.dto';
-import { IPagination } from 'src/common/interface/pagination.interface';
-import { Comment } from './entity/comment.entity';
+import { IPagination } from './../../common/interface/pagination.interface';
+import { CommentEntity } from './entity/comment.entity';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { CurrentUser } from '../user/decorator/user.decorator';
-import { User } from '../user/entity/user.entity';
+import { UserEntity } from '../user/entity/user.entity';
 import { PolicyService } from '../policy/policy.service';
 import { PolicyAction } from '../policy/interface/policy.interface';
 import { Auth } from '../auth/decorator/auth.decorator';
@@ -26,7 +26,7 @@ export class CommentController {
     @ApiOkResponse({
         description: 'Receive Array Of Comments With Paginate'
     })
-    async getComments(@Query() findDto: FindCommentsDto): Promise<IPagination<Comment>> {
+    async getComments(@Query() findDto: FindCommentsDto): Promise<IPagination<CommentEntity>> {
         return await this.commentService.findAll(findDto);
     }
 
@@ -37,7 +37,7 @@ export class CommentController {
     @ApiNotFoundResponse({
         description: 'Comment Not Found'
     })
-    async getCommentById(@Param('id', ParseUUIDPipe) id: string): Promise<Comment> {
+    async getCommentById(@Param('id', ParseUUIDPipe) id: string): Promise<CommentEntity> {
         return await this.commentService.findById(id, true);
     }
 
@@ -51,8 +51,8 @@ export class CommentController {
     })
     async createComment(
         @Body() createDto: CreateCommentDto,
-        @CurrentUser() user: User
-    ): Promise<Comment> {
+        @CurrentUser() user: UserEntity
+    ): Promise<CommentEntity> {
         return await this.commentService.create(createDto, user);
     }
 
@@ -67,7 +67,7 @@ export class CommentController {
     @ApiForbiddenResponse({
         description: 'Invalid User Policy Access'
     })
-    async removeComment(@Param('id', ParseUUIDPipe) id: string, @CurrentUser() user: User) {
+    async removeComment(@Param('id', ParseUUIDPipe) id: string, @CurrentUser() user: UserEntity) {
         const comment = await this.commentService.findById(id, true);
         this.policyService.forComment(PolicyAction.Delete, user, comment, true);
         return await this.commentService.remove(id);

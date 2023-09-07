@@ -2,12 +2,13 @@ import { Module } from '@nestjs/common';
 import { CommentService } from './comment.service';
 import { CommentController } from './comment.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Comment } from './entity/comment.entity';
+import { CommentEntity } from './entity/comment.entity';
 import { BookModule } from '../book/book.module';
+import { DatabaseSource } from 'src/database/interface/database.interface';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Comment]),
+    TypeOrmModule.forFeature([CommentEntity], DatabaseSource.Primary),
     BookModule
   ],
   providers: [CommentService],

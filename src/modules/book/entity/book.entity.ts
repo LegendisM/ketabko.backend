@@ -1,11 +1,13 @@
-import { Author } from "src/modules/author/entity/author.entity";
-import { Category } from "src/modules/category/entity/category.entity";
-import { StorageFile } from "src/modules/storage/entity/storage-file.entity";
+import { AuthorEntity } from "./../../author/entity/author.entity";
+import { CategoryEntity } from "./../../category/entity/category.entity";
+import { StorageFileEntity } from "./../../storage/entity/storage-file.entity";
 import { Column, Entity, JoinColumn, JoinTable, ManyToMany, OneToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { BookSection } from "./book-section.entity";
+import { BookSectionEntity } from "./book-section.entity";
 
-@Entity()
-export class Book {
+@Entity({
+    name: "book",
+})
+export class BookEntity {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
@@ -18,21 +20,21 @@ export class Book {
     @Column()
     price: number;
 
-    @ManyToOne(() => StorageFile, (storageFile) => storageFile.id, { eager: true, onDelete: 'SET NULL' })
+    @ManyToOne(() => StorageFileEntity, (storageFile) => storageFile.id, { eager: true, onDelete: 'SET NULL' })
     @JoinColumn()
-    cover: StorageFile;
+    cover: StorageFileEntity;
 
-    @ManyToOne(() => StorageFile, (storageFile) => storageFile.id, { eager: true, onDelete: 'SET NULL' })
+    @ManyToOne(() => StorageFileEntity, (storageFile) => storageFile.id, { eager: true, onDelete: 'SET NULL' })
     @JoinColumn()
-    audio: StorageFile;
+    audio: StorageFileEntity;
 
-    @OneToMany(() => BookSection, (bookSection) => bookSection.book, { eager: true })
-    sections: BookSection[];
+    @OneToMany(() => BookSectionEntity, (bookSection) => bookSection.book, { eager: true })
+    sections: BookSectionEntity[];
 
-    @ManyToOne(() => Author, (author) => author.books, { eager: true, onDelete: 'CASCADE' })
-    author: Author;
+    @ManyToOne(() => AuthorEntity, (author) => author.books, { eager: true, onDelete: 'CASCADE' })
+    author: AuthorEntity;
 
-    @ManyToMany(() => Category, { eager: true })
+    @ManyToMany(() => CategoryEntity, { eager: true })
     @JoinTable()
-    categories: Category[];
+    categories: CategoryEntity[];
 }

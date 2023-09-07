@@ -1,19 +1,19 @@
 import { Controller, Get, Post, Delete, Param, Body, Patch, ParseUUIDPipe, Query } from '@nestjs/common';
 import { ApiCreatedResponse, ApiNotFoundResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { BookSectionDocumentService } from '../service/book-section-document.service';
-import { Roles } from 'src/modules/user/decorator/role.decorator';
-import { Role } from 'src/modules/user/interface/role.interface';
-import { Auth } from 'src/modules/auth/decorator/auth.decorator';
-import { BookSectionDocument } from '../entity/book-section-document.entity';
-import { IPagination } from 'src/common/interface/pagination.interface';
-import { PaginationDto } from 'src/common/dto/pagination.dto';
-import { CurrentUser } from 'src/modules/user/decorator/user.decorator';
-import { User } from 'src/modules/user/entity/user.entity';
+import { Roles } from './../../user/decorator/role.decorator';
+import { Role } from './../../user/interface/role.interface';
+import { Auth } from './../../auth/decorator/auth.decorator';
+import { BookSectionDocumentEntity } from '../entity/book-section-document.entity';
+import { IPagination } from './../../../common/interface/pagination.interface';
+import { PaginationDto } from './../../../common/dto/pagination.dto';
+import { CurrentUser } from './../../user/decorator/user.decorator';
+import { UserEntity } from './../../user/entity/user.entity';
 import { FindBookSectionDocumentsDto } from '../dto/book-section-document/find-book-section-document.dto';
 import { CreateBookSectionDocumentDto } from '../dto/book-section-document/create-book-section-document.dto';
 import { UpdateBookSectionDocumentDto } from '../dto/book-section-document/update-book-section-document.dto';
-import { PolicyService } from 'src/modules/policy/policy.service';
-import { PolicyAction } from 'src/modules/policy/interface/policy.interface';
+import { PolicyService } from './../../policy/policy.service';
+import { PolicyAction } from './../../policy/interface/policy.interface';
 
 @ApiTags('Book Section Documents')
 @Controller({
@@ -32,7 +32,7 @@ export class BookSectionDocumentController {
     @ApiOkResponse({
         description: 'Receive Array Of Documents With Paginate'
     })
-    async getAllDocuments(@Query() findDto: FindBookSectionDocumentsDto): Promise<IPagination<BookSectionDocument>> {
+    async getAllDocuments(@Query() findDto: FindBookSectionDocumentsDto): Promise<IPagination<BookSectionDocumentEntity>> {
         return await this.bookSectionDocumentService.findAll(findDto);
     }
 
@@ -42,8 +42,8 @@ export class BookSectionDocumentController {
     })
     async getUserDocuments(
         @Query() paginationDto: PaginationDto,
-        @CurrentUser() user: User
-    ): Promise<IPagination<BookSectionDocument>> {
+        @CurrentUser() user: UserEntity
+    ): Promise<IPagination<BookSectionDocumentEntity>> {
         return await this.bookSectionDocumentService.findAll({ user: user.id, ...paginationDto }, true);
     }
 
@@ -54,8 +54,8 @@ export class BookSectionDocumentController {
     async getSectionUserDocuments(
         @Param('sectionId', ParseUUIDPipe) sectionId: string,
         @Query() paginationDto: PaginationDto,
-        @CurrentUser() user: User
-    ): Promise<IPagination<BookSectionDocument>> {
+        @CurrentUser() user: UserEntity
+    ): Promise<IPagination<BookSectionDocumentEntity>> {
         return await this.bookSectionDocumentService.findAll({ section: sectionId, user: user.id, ...paginationDto }, true);
     }
 
@@ -66,7 +66,7 @@ export class BookSectionDocumentController {
     @ApiNotFoundResponse({
         description: 'Document Not Found'
     })
-    async getDocumentById(@Param('id', ParseUUIDPipe) id: string, @CurrentUser() user: User): Promise<BookSectionDocument> {
+    async getDocumentById(@Param('id', ParseUUIDPipe) id: string, @CurrentUser() user: UserEntity): Promise<BookSectionDocumentEntity> {
         const document = await this.bookSectionDocumentService.findById(id, true);
         this.policyService.forBookSectionDocument(PolicyAction.Read, user, document, true);
         return document;
@@ -81,8 +81,8 @@ export class BookSectionDocumentController {
     })
     async createDocument(
         @Body() createDto: CreateBookSectionDocumentDto,
-        @CurrentUser() user: User
-    ): Promise<BookSectionDocument> {
+        @CurrentUser() user: UserEntity
+    ): Promise<BookSectionDocumentEntity> {
         return await this.bookSectionDocumentService.create(createDto, user);
     }
 
@@ -96,7 +96,7 @@ export class BookSectionDocumentController {
     async updateDocument(
         @Param('id', ParseUUIDPipe) id: string,
         @Body() updateDto: UpdateBookSectionDocumentDto,
-        @CurrentUser() user: User
+        @CurrentUser() user: UserEntity
     ) {
         const document = await this.bookSectionDocumentService.findById(id, true);
         this.policyService.forBookSectionDocument(PolicyAction.Update, user, document, true);
@@ -112,7 +112,7 @@ export class BookSectionDocumentController {
     })
     async removeDocument(
         @Param('id', ParseUUIDPipe) id: string,
-        @CurrentUser() user: User
+        @CurrentUser() user: UserEntity
     ) {
         const document = await this.bookSectionDocumentService.findById(id, true);
         this.policyService.forBookSectionDocument(PolicyAction.Delete, user, document, true);

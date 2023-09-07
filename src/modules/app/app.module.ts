@@ -13,7 +13,8 @@ import { CommentModule } from '../comment/comment.module';
 import { AuthorModule } from '../author/author.module';
 import { PolicyModule } from '../policy/policy.module';
 import { PaymentModule } from '../payment/payment.module';
-import { PrimaryDataSource } from 'src/database/primary/primary.data-source';
+import { PrimaryDataSource } from './../../database/primary/primary.data-source';
+import { DatabaseSource } from 'src/database/interface/database.interface';
 
 @Module({
   imports: [
@@ -29,9 +30,10 @@ import { PrimaryDataSource } from 'src/database/primary/primary.data-source';
       resolvers: [HeaderResolver]
     }),
     TypeOrmModule.forRootAsync({
-      name: "primary",
+      name: DatabaseSource.Primary,
+      useFactory: () => ({}),
       dataSourceFactory: async () => {
-        return await PrimaryDataSource;
+        return await PrimaryDataSource.initialize();
       },
     }),
     UserModule,

@@ -1,11 +1,11 @@
+import _ from "lodash";
 import { ConflictException, Injectable } from "@nestjs/common";
 import { PaymentService } from "./payment.service";
 import { PaymentStatus } from "../interface/payment.interface";
 import { PaymentDriverService } from "./payment-driver.service";
 import { PaymentDriverType } from "../interface/payment-driver.interface";
-import _ from "lodash";
-import { OrderService } from "src/modules/order/order.service";
-import { OrderStatus } from "src/modules/order/interface/order.interface";
+import { OrderService } from "./../../order/order.service";
+import { OrderStatus } from "./../../order/interface/order.interface";
 
 @Injectable()
 export class PaymentAdapterService {

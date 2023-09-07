@@ -18,9 +18,9 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
+    "typeorm:primary:generate": "npx typeorm-ts-node-commonjs migration:generate ./src/database/primary/migration/migration -d ./src/database/primary/primary.data-source.ts",
+    "typeorm:primary:create": "npx typeorm-ts-node-commonjs migration:create ./src/database/primary/migration/migration -- -d ./src/database/primary/primary.data-source.ts",
     "typeorm:primary:run": "npx typeorm-ts-node-commonjs migration:run -d ./src/database/primary/primary.data-source.ts",
-    "typeorm:primary:generate": "npx typeorm-ts-node-commonjs migration:generate ./src/database/primary/migration -d ./src/database/primary/primary.data-source.ts",
-    "typeorm:primary:create": "npx typeorm-ts-node-commonjs migration:create ./src/database/primary/migration -- -d ./src/database/primary/primary.data-source.ts",
     "typeorm:primary:revert": "npx typeorm-ts-node-commonjs migration:revert -d ./src/database/primary/primary.data-source.ts"
   },
   "dependencies": {

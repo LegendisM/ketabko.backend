@@ -1,27 +1,28 @@
+import _ from 'lodash';
 import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Category } from './entity/category.entity';
+import { CategoryEntity } from './entity/category.entity';
 import { FindOptionsWhere, Like, Repository } from 'typeorm';
-import { IPagination } from 'src/common/interface/pagination.interface';
+import { IPagination } from './../../common/interface/pagination.interface';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { FindCategoriesDto } from './dto/find-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
-import _ from 'lodash';
+import { DatabaseSource } from 'src/database/interface/database.interface';
 
 @Injectable()
 export class CategoryService {
     constructor(
-        @InjectRepository(Category) private categoryRepository: Repository<Category>
+        @InjectRepository(CategoryEntity, DatabaseSource.Primary) private categoryRepository: Repository<CategoryEntity>
     ) { }
 
-    async create(createDto: CreateCategoryDto): Promise<Category> {
+    async create(createDto: CreateCategoryDto): Promise<CategoryEntity> {
         await this.preventDuplicate(createDto.name);
         const category = this.categoryRepository.create(createDto);
         return await this.categoryRepository.save(category);
     }
 
-    async findAll({ name, limit, page }: FindCategoriesDto, mergeCondition: boolean = false): Promise<IPagination<Category>> {
-        let where: FindOptionsWhere<Category>[] = [
+    async findAll({ name, limit, page }: FindCategoriesDto, mergeCondition: boolean = false): Promise<IPagination<CategoryEntity>> {
+        let where: FindOptionsWhere<CategoryEntity>[] = [
             (name) ?
                 { name: Like(`%${name}%`) }
                 : null
@@ -41,7 +42,7 @@ export class CategoryService {
         }
     }
 
-    async findById(id: string, exception: boolean = false): Promise<Category> {
+    async findById(id: string, exception: boolean = false): Promise<CategoryEntity> {
         const category = await this.categoryRepository.findOneBy({ id });
         if (exception && !category) {
             throw new NotFoundException('category.invalid-id');
@@ -49,7 +50,7 @@ export class CategoryService {
         return category;
     }
 
-    async findByName(name: string, exception: boolean = false): Promise<Category> {
+    async findByName(name: string, exception: boolean = false): Promise<CategoryEntity> {
         const category = await this.categoryRepository.findOneBy({ name });
         if (exception && !category) {
             throw new NotFoundException('category.invalid-name');
@@ -57,13 +58,13 @@ export class CategoryService {
         return category;
     }
 
-    async update(id: string, updateDto: UpdateCategoryDto): Promise<Category> {
+    async update(id: string, updateDto: UpdateCategoryDto): Promise<CategoryEntity> {
         const category = await this.findById(id, true);
         Object.assign(category, updateDto);
         return await this.categoryRepository.save(category);
     }
 
-    async remove(id: string): Promise<Category> {
+    async remove(id: string): Promise<CategoryEntity> {
         const category = await this.findById(id, true);
         return await this.categoryRepository.remove(category);
     }

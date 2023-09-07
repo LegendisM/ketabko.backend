@@ -1,16 +1,18 @@
 import { InferSubjects } from "@casl/ability";
-import { Author } from "src/modules/author/entity/author.entity";
-import { BookSectionDocument } from "src/modules/book/entity/book-section-document.entity";
-import { Book } from "src/modules/book/entity/book.entity";
-import { Category } from "src/modules/category/entity/category.entity";
-import { Order } from "src/modules/order/entity/order.entity";
-import { Payment } from "src/modules/payment/entity/payment.entity";
-import { StorageFile } from "src/modules/storage/entity/storage-file.entity";
-import { User } from "src/modules/user/entity/user.entity";
+import { AuthorEntity } from "./../../author/entity/author.entity";
+import { BookSectionDocumentEntity } from "./../../book/entity/book-section-document.entity";
+import { BookEntity } from "./../../book/entity/book.entity";
+import { CategoryEntity } from "./../../category/entity/category.entity";
+import { OrderEntity } from "./../../order/entity/order.entity";
+import { PaymentEntity } from "./../../payment/entity/payment.entity";
+import { StorageFileEntity } from "./../../storage/entity/storage-file.entity";
+import { UserEntity } from "./../../user/entity/user.entity";
+import { CommentEntity } from "src/modules/comment/entity/comment.entity";
+import { BookSectionEntity } from "src/modules/book/entity/book-section.entity";
 
 export type PolicySubjects = InferSubjects<
-    typeof User | typeof Order | typeof Payment | typeof Book | typeof Category | typeof Comment | typeof StorageFile | typeof Author | typeof BookSectionDocument
-> | 'User' | 'Order' | 'Payment' | 'Book' | 'Category' | 'Comment' | 'StorageFile' | 'Author' | 'BookSectionDocument' | 'all';
+    typeof UserEntity | typeof OrderEntity | typeof PaymentEntity | typeof BookEntity | typeof CategoryEntity | typeof CommentEntity | typeof StorageFileEntity | typeof AuthorEntity | typeof BookSectionEntity | typeof BookSectionDocumentEntity
+> | 'UserEntity' | 'OrderEntity' | 'PaymentEntity' | 'BookEntity' | 'CategoryEntity' | 'CommentEntity' | 'StorageFileEntity' | 'AuthorEntity' | 'BookSectionEntity' | 'BookSectionDocumentEntity' | 'all';
 
 export enum PolicyAction {
     Manage = 'manage',

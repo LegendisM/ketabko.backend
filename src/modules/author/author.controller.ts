@@ -1,8 +1,8 @@
 import { Body, Controller, Delete, Get, Param, ParseUUIDPipe, Post, Patch, Query } from '@nestjs/common';
 import { ApiCreatedResponse, ApiNotFoundResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { AuthorService } from './author.service';
-import { IPagination } from 'src/common/interface/pagination.interface';
-import { Author } from './entity/author.entity';
+import { IPagination } from './../../common/interface/pagination.interface';
+import { AuthorEntity } from './entity/author.entity';
 import { FindAuthorsDto } from './dto/find-author.dto';
 import { Roles } from '../user/decorator/role.decorator';
 import { Role } from '../user/interface/role.interface';
@@ -23,7 +23,7 @@ export class AuthorController {
     @ApiOkResponse({
         description: 'Receive Array Of Authors With Paginate'
     })
-    async getAuthors(@Query() findDto: FindAuthorsDto): Promise<IPagination<Author>> {
+    async getAuthors(@Query() findDto: FindAuthorsDto): Promise<IPagination<AuthorEntity>> {
         return await this.authorService.findAll(findDto);
     }
 
@@ -34,7 +34,7 @@ export class AuthorController {
     @ApiNotFoundResponse({
         description: 'Author Not Found'
     })
-    async getAuthorById(@Param('id', ParseUUIDPipe) id: string): Promise<Author> {
+    async getAuthorById(@Param('id', ParseUUIDPipe) id: string): Promise<AuthorEntity> {
         return await this.authorService.findById(id, true);
     }
 
@@ -46,7 +46,7 @@ export class AuthorController {
     @ApiNotFoundResponse({
         description: 'Avatar StorageFile Not Found'
     })
-    async createAuthor(@Body() createDto: CreateAuthorDto): Promise<Author> {
+    async createAuthor(@Body() createDto: CreateAuthorDto): Promise<AuthorEntity> {
         return await this.authorService.create(createDto);
     }
 

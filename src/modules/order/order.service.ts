@@ -1,29 +1,30 @@
 import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Order } from './entity/order.entity';
+import { OrderEntity } from './entity/order.entity';
 import { Repository } from 'typeorm';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { OrderStatus, OrderableType } from './interface/order.interface';
 import { BookService } from '../book/service/book.service';
-import { User } from '../user/entity/user.entity';
-import { IPagination } from 'src/common/interface/pagination.interface';
-import { PaginationDto } from 'src/common/dto/pagination.dto';
+import { UserEntity } from '../user/entity/user.entity';
+import { IPagination } from './../../common/interface/pagination.interface';
+import { PaginationDto } from './../../common/dto/pagination.dto';
+import { DatabaseSource } from 'src/database/interface/database.interface';
 
 @Injectable()
 export class OrderService {
     constructor(
-        @InjectRepository(Order) private orderRepository: Repository<Order>,
+        @InjectRepository(OrderEntity, DatabaseSource.Primary) private orderRepository: Repository<OrderEntity>,
         private bookService: BookService
     ) { }
 
-    async create({ entityId, entityType }: CreateOrderDto, user: User): Promise<Order> {
+    async create({ entityId, entityType }: CreateOrderDto, user: UserEntity): Promise<OrderEntity> {
         const entity = await this.validateEntity(entityType, entityId, true);
         await this.preventDuplicate(entityType, entityId, user);
         const order = await this.orderRepository.create({ entityId, entityType, price: entity.price, user });
         return await this.orderRepository.save(order);
     }
 
-    async findAll({ limit, page }: PaginationDto, mergeCondition: boolean = false): Promise<IPagination<Order>> {
+    async findAll({ limit, page }: PaginationDto, mergeCondition: boolean = false): Promise<IPagination<OrderEntity>> {
         const orders = await this.orderRepository.find({
             skip: (page - 1) * limit,
             take: limit - 1
@@ -37,19 +38,19 @@ export class OrderService {
         }
     }
 
-    async findAllByUser(user: User): Promise<Order[]> {
+    async findAllByUser(user: UserEntity): Promise<OrderEntity[]> {
         return await this.orderRepository.findBy({ user: { id: user.id } });
     }
 
     async findByEntity(
         entityType: OrderableType,
         entityId: string,
-        user: User
-    ): Promise<Order> {
+        user: UserEntity
+    ): Promise<OrderEntity> {
         return await this.orderRepository.findOneBy({ entityType, entityId, user: { id: user.id } });
     }
 
-    async findById(id: string, exception: boolean = false): Promise<Order> {
+    async findById(id: string, exception: boolean = false): Promise<OrderEntity> {
         const order = await this.orderRepository.findOneBy({ id });
         if (exception && !order) {
             throw new NotFoundException('order.invalid-id');
@@ -57,18 +58,18 @@ export class OrderService {
         return order;
     }
 
-    async update(id: string, updateDto: Partial<Order>): Promise<Order> {
+    async update(id: string, updateDto: Partial<OrderEntity>): Promise<OrderEntity> {
         const order = await this.findById(id, true);
         Object.assign(order, updateDto);
         return await this.orderRepository.save(order);
     }
 
-    async remove(id: string): Promise<Order> {
+    async remove(id: string): Promise<OrderEntity> {
         const order = await this.findById(id, true);
         return await this.orderRepository.remove(order);
     }
 
-    async preventDuplicate(entityType: OrderableType, entityId: string, user: User) {
+    async preventDuplicate(entityType: OrderableType, entityId: string, user: UserEntity) {
         const order = await this.findByEntity(entityType, entityId, user);
         if (order) {
             throw new ConflictException('order.duplicate-order');

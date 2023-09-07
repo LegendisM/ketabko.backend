@@ -3,11 +3,11 @@ import { PaymentService } from './service/payment.service';
 import { Roles } from '../user/decorator/role.decorator';
 import { Role } from '../user/interface/role.interface';
 import { Auth } from '../auth/decorator/auth.decorator';
-import { IPagination } from 'src/common/interface/pagination.interface';
-import { Payment } from './entity/payment.entity';
+import { IPagination } from './../../common/interface/pagination.interface';
+import { PaymentEntity } from './entity/payment.entity';
 import { CreatePaymentDto } from './dto/create-payment.dto';
 import { CurrentUser } from '../user/decorator/user.decorator';
-import { User } from '../user/entity/user.entity';
+import { UserEntity } from '../user/entity/user.entity';
 import { FindPaymentsDto } from './dto/find-payment.dto';
 import { PaymentAdapterService } from './service/payment-adapter.service';
 import { PolicyService } from '../policy/policy.service';
@@ -34,7 +34,7 @@ export class PaymentController {
     @ApiOkResponse({
         description: 'Receive Array Of Payments With Paginate'
     })
-    async getAllPayments(@Query() findDto: FindPaymentsDto): Promise<IPagination<Payment>> {
+    async getAllPayments(@Query() findDto: FindPaymentsDto): Promise<IPagination<PaymentEntity>> {
         return await this.paymentService.findAll(findDto);
     }
 
@@ -42,7 +42,7 @@ export class PaymentController {
     @ApiOkResponse({
         description: 'Receive Array Of User Payments'
     })
-    async getUserPayments(@CurrentUser() user: User): Promise<Payment[]> {
+    async getUserPayments(@CurrentUser() user: UserEntity): Promise<PaymentEntity[]> {
         return await this.paymentService.findAllByUser(user);
     }
 
@@ -61,7 +61,7 @@ export class PaymentController {
     })
     async startPayment(
         @Param('id', ParseUUIDPipe) id: string,
-        @CurrentUser() user: User
+        @CurrentUser() user: UserEntity
     ): Promise<string> {
         const payment = await this.paymentService.findById(id, true);
         this.policyService.forPayment(PolicyAction.Read, user, payment, true);
@@ -98,8 +98,8 @@ export class PaymentController {
     })
     async createPayment(
         @Body() createDto: CreatePaymentDto,
-        @CurrentUser() user: User
-    ): Promise<Payment> {
+        @CurrentUser() user: UserEntity
+    ): Promise<PaymentEntity> {
         return await this.paymentService.create(createDto, user);
     }
 

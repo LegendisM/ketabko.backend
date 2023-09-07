@@ -1,7 +1,7 @@
 import { ApiProperty, IntersectionType } from "@nestjs/swagger";
 import { PaymentStatus } from "../interface/payment.interface";
 import { IsEnum, IsOptional, IsUUID } from "class-validator";
-import { PaginationDto } from "src/common/dto/pagination.dto";
+import { PaginationDto } from "./../../../common/dto/pagination.dto";
 
 export class FindPaymentsDto extends IntersectionType(PaginationDto) {
     @ApiProperty({

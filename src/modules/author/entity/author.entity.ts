@@ -1,9 +1,11 @@
-import { Book } from "src/modules/book/entity/book.entity";
-import { StorageFile } from "src/modules/storage/entity/storage-file.entity";
+import { BookEntity} from "./../../book/entity/book.entity";
+import { StorageFileEntity } from "./../../storage/entity/storage-file.entity";
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
-@Entity()
-export class Author {
+@Entity({
+    name: "author",
+})
+export class AuthorEntity {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
@@ -13,10 +15,10 @@ export class Author {
     @Column({ type: 'text' })
     description: string;
 
-    @ManyToOne(() => StorageFile, (storageFile) => storageFile.id, { eager: true, onDelete: 'SET NULL' })
+    @ManyToOne(() => StorageFileEntity, (storageFile) => storageFile.id, { eager: true, onDelete: 'SET NULL' })
     @JoinColumn()
-    avatar: StorageFile;
+    avatar: StorageFileEntity;
 
-    @OneToMany(() => Book, (book) => book.author)
-    books: Book[];
+    @OneToMany(() => BookEntity, (book) => book.author)
+    books: BookEntity[];
 }

@@ -1,14 +1,16 @@
 import { Column, Entity, JoinColumn, OneToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Role } from "../interface/role.interface";
-import { Order } from "src/modules/order/entity/order.entity";
-import { Comment } from "src/modules/comment/entity/comment.entity";
-import { StorageFile } from "src/modules/storage/entity/storage-file.entity";
+import { OrderEntity } from "./../../order/entity/order.entity";
+import { CommentEntity } from "./../../comment/entity/comment.entity";
+import { StorageFileEntity } from "./../../storage/entity/storage-file.entity";
 import { Exclude } from "class-transformer";
-import { Payment } from "src/modules/payment/entity/payment.entity";
-import { BookSectionDocument } from "src/modules/book/entity/book-section-document.entity";
+import { PaymentEntity } from "./../../payment/entity/payment.entity";
+import { BookSectionDocumentEntity } from "./../../book/entity/book-section-document.entity";
 
-@Entity()
-export class User {
+@Entity({
+    name: "user",
+})
+export class UserEntity {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
@@ -37,22 +39,22 @@ export class User {
     })
     roles: Role[];
 
-    @ManyToOne(() => StorageFile, (storageFile) => storageFile.id, { eager: true, onDelete: 'SET NULL' })
+    @ManyToOne(() => StorageFileEntity, (storageFile) => storageFile.id, { eager: true, onDelete: 'SET NULL' })
     @JoinColumn()
-    avatar: StorageFile;
+    avatar: StorageFileEntity;
 
-    @OneToMany(() => Order, (order) => order.user)
-    orders: Order[];
+    @OneToMany(() => OrderEntity, (order) => order.user)
+    orders: OrderEntity[];
 
-    @OneToMany(() => Comment, (comment) => comment.user)
-    comments: Comment[];
+    @OneToMany(() => CommentEntity, (comment) => comment.user)
+    comments: CommentEntity[];
 
-    @OneToMany(() => StorageFile, (storageFile) => storageFile.user)
-    files: StorageFile[];
+    @OneToMany(() => StorageFileEntity, (storageFile) => storageFile.user)
+    files: StorageFileEntity[];
 
-    @OneToMany(() => Payment, (payment) => payment.user)
-    payments: Payment[];
+    @OneToMany(() => PaymentEntity, (payment) => payment.user)
+    payments: PaymentEntity[];
 
-    @OneToMany(() => BookSectionDocument, (bookSectionDocument) => bookSectionDocument.user)
-    bookSectionDocuments: BookSectionDocument[];
+    @OneToMany(() => BookSectionDocumentEntity, (bookSectionDocument) => bookSectionDocument.user)
+    bookSectionDocuments: BookSectionDocumentEntity[];
 }

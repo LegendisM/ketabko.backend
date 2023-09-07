@@ -1,17 +1,19 @@
 import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { Book } from "./book.entity";
+import { BookEntity } from "./book.entity";
 import { BookSectionField } from "../class/book-section-field.class";
-import { BookSectionDocument } from "./book-section-document.entity";
+import { BookSectionDocumentEntity } from "./book-section-document.entity";
 
-@Entity()
-export class BookSection {
+@Entity({
+    name: "book_section",
+})
+export class BookSectionEntity {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
     @Column()
     title: string;
 
-    @Column('simple-array',{
+    @Column('simple-array', {
         default: [],
         transformer: {
             from: (value) => JSON.parse(value),
@@ -20,9 +22,9 @@ export class BookSection {
     })
     fields: BookSectionField[];
 
-    @OneToMany(() => BookSectionDocument, (sectionDocument) => sectionDocument.section)
-    documents: BookSectionDocument[];
+    @OneToMany(() => BookSectionDocumentEntity, (sectionDocument) => sectionDocument.section)
+    documents: BookSectionDocumentEntity[];
 
-    @ManyToOne(() => Book, (book) => book.sections, { onDelete: 'CASCADE' })
-    book: Book;
+    @ManyToOne(() => BookEntity, (book) => book.sections, { onDelete: 'CASCADE' })
+    book: BookEntity;
 }

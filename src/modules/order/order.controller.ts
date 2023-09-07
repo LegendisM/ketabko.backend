@@ -1,14 +1,14 @@
 import { Body, Controller, Delete, Get, Param, ParseUUIDPipe, Post, Query } from '@nestjs/common';
 import { ApiConflictResponse, ApiCreatedResponse, ApiForbiddenResponse, ApiNotFoundResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { OrderService } from './order.service';
-import { IPagination } from 'src/common/interface/pagination.interface';
-import { Order } from './entity/order.entity';
+import { IPagination } from './../../common/interface/pagination.interface';
+import { OrderEntity } from './entity/order.entity';
 import { Roles } from '../user/decorator/role.decorator';
 import { Role } from '../user/interface/role.interface';
-import { PaginationDto } from 'src/common/dto/pagination.dto';
+import { PaginationDto } from './../../common/dto/pagination.dto';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { CurrentUser } from '../user/decorator/user.decorator';
-import { User } from '../user/entity/user.entity';
+import { UserEntity } from '../user/entity/user.entity';
 import { PolicyService } from '../policy/policy.service';
 import { PolicyAction } from '../policy/interface/policy.interface';
 import { Auth } from '../auth/decorator/auth.decorator';
@@ -30,7 +30,7 @@ export class OrderController {
     @ApiOkResponse({
         description: 'Receive Array Of Orders With Paginate'
     })
-    async getAllOrders(@Query() paginationDto: PaginationDto): Promise<IPagination<Order>> {
+    async getAllOrders(@Query() paginationDto: PaginationDto): Promise<IPagination<OrderEntity>> {
         return await this.orderService.findAll(paginationDto);
     }
 
@@ -38,7 +38,7 @@ export class OrderController {
     @ApiOkResponse({
         description: 'Receive Array Of User Orders'
     })
-    async getUserOrders(@CurrentUser() user: User): Promise<Order[]> {
+    async getUserOrders(@CurrentUser() user: UserEntity): Promise<OrderEntity[]> {
         return await this.orderService.findAllByUser(user);
     }
 
@@ -54,8 +54,8 @@ export class OrderController {
     })
     async getOrderById(
         @Param('id', ParseUUIDPipe) id: string,
-        @CurrentUser() user: User
-    ): Promise<Order> {
+        @CurrentUser() user: UserEntity
+    ): Promise<OrderEntity> {
         const order = await this.orderService.findById(id, true);
         this.policyService.forOrder(PolicyAction.Read, user, order, true);
         return order;
@@ -73,8 +73,8 @@ export class OrderController {
     })
     async createOrder(
         @Body() createDto: CreateOrderDto,
-        @CurrentUser() user: User
-    ): Promise<Order> {
+        @CurrentUser() user: UserEntity
+    ): Promise<OrderEntity> {
         return await this.orderService.create(createDto, user);
     }
 

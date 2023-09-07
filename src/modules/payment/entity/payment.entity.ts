@@ -1,11 +1,13 @@
-import { Order } from "src/modules/order/entity/order.entity";
-import { AfterUpdate, Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, RelationId } from "typeorm";
+import { OrderEntity } from "./../../order/entity/order.entity";
+import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, RelationId } from "typeorm";
 import { PaymentStatus } from "../interface/payment.interface";
-import { User } from "src/modules/user/entity/user.entity";
+import { UserEntity } from "./../../../modules/user/entity/user.entity";
 import { PaymentDriverType } from "../interface/payment-driver.interface";
 
-@Entity()
-export class Payment {
+@Entity({
+    name: "payment",
+})
+export class PaymentEntity {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
@@ -31,12 +33,12 @@ export class Payment {
     @CreateDateColumn()
     createdAt: Date;
 
-    @ManyToOne(() => Order, (order) => order.payments, { eager: true, onDelete: 'CASCADE' })
-    order: Order;
+    @ManyToOne(() => OrderEntity, (order) => order.payments, { eager: true, onDelete: 'CASCADE' })
+    order: OrderEntity;
 
-    @ManyToOne(() => User, (user) => user.payments, { eager: true, onDelete: 'CASCADE' })
-    user: User;
+    @ManyToOne(() => UserEntity, (user) => user.payments, { eager: true, onDelete: 'CASCADE' })
+    user: UserEntity;
 
-    @RelationId((payment: Payment) => payment.user)
+    @RelationId((payment: PaymentEntity) => payment.user)
     userId: string;
 }

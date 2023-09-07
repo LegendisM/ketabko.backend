@@ -3,7 +3,7 @@ import { ApiTags } from "@nestjs/swagger";
 import { UserService } from "./user.service";
 import { Auth } from "../auth/decorator/auth.decorator";
 import { CurrentUser } from "./decorator/user.decorator";
-import { User } from "./entity/user.entity";
+import { UserEntity } from "./entity/user.entity";
 
 @ApiTags('Users')
 @Controller({
@@ -17,7 +17,7 @@ export class UserController {
     ) { }
 
     @Get('/me')
-    async getSelf(@CurrentUser() user: User): Promise<User> {
+    async getSelf(@CurrentUser() user: UserEntity): Promise<UserEntity> {
         return user;
     }
 }

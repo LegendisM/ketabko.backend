@@ -1,6 +1,6 @@
 import { Injectable, OnModuleInit, ConflictException } from "@nestjs/common";
 import { PaymentDriver } from "../../class/payment-driver.class";
-import { Payment } from "../../entity/payment.entity";
+import { PaymentEntity } from "../../entity/payment.entity";
 import { IPaymentRequest, IPaymentVerify, PaymentStatus } from "../../interface/payment.interface";
 import { HttpService } from "@nestjs/axios";
 import { ConfigService } from "@nestjs/config";
@@ -37,7 +37,7 @@ export class PaymentZarinpalDriver extends PaymentDriver implements OnModuleInit
         };
     }
 
-    async request(payment: Payment): Promise<IPaymentRequest> {
+    async request(payment: PaymentEntity): Promise<IPaymentRequest> {
         const response = await firstValueFrom(
             this.httpService.post(
                 this.config.requestEndpoint,

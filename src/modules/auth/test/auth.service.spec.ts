@@ -2,14 +2,14 @@ import { Test, TestingModule } from "@nestjs/testing";
 import { AuthService } from "../auth.service";
 import { JwtModule } from "@nestjs/jwt";
 import { UserService } from "../../user/user.service";
-import { User } from "../../user/entity/user.entity";
+import { UserEntity } from "../../user/entity/user.entity";
 
 describe('Auth Service', () => {
     let service: AuthService;
-    let mockUsers: User[] = [];
+    let mockUsers: UserEntity[] = [];
     let mockUserService: Partial<UserService> = {
         create: ({ username, password }) => {
-            const user = { id: 'uuid', username, password } as User;
+            const user = { id: 'uuid', username, password } as UserEntity;
             mockUsers.push(user);
             return Promise.resolve(user);
         },

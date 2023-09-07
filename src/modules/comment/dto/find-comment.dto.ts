@@ -1,6 +1,6 @@
 import { ApiProperty, IntersectionType } from "@nestjs/swagger";
 import { IsEnum, IsOptional, IsUUID } from "class-validator";
-import { PaginationDto } from "src/common/dto/pagination.dto";
+import { PaginationDto } from "./../../../common/dto/pagination.dto";
 import { CommentableType } from "../interface/comment.interface";
 
 export class FindCommentsDto extends IntersectionType(PaginationDto) {

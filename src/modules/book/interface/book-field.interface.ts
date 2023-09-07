@@ -1,7 +1,7 @@
 export enum BookSectionFieldType {
-    TEXT = 'text',
-    TEXTAREA = 'textarea',
-    NUMBER = 'number',
-    DATE = 'date',
-    CHECKBOX = "checkbox"
+    Text = 'text',
+    TextArea = 'textarea',
+    Number = 'number',
+    Date = 'date',
+    CheckBox = "checkbox",
 }

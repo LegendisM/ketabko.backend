@@ -1,30 +1,31 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { BookService } from '../book/service/book.service';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Comment } from './entity/comment.entity';
+import { CommentEntity } from './entity/comment.entity';
 import { FindOptionsWhere, Repository } from 'typeorm';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { CommentableType } from './interface/comment.interface';
-import { IPagination } from 'src/common/interface/pagination.interface';
+import { IPagination } from './../../common/interface/pagination.interface';
 import { FindCommentsDto } from './dto/find-comment.dto';
-import { User } from '../user/entity/user.entity';
+import { UserEntity } from '../user/entity/user.entity';
 import _ from 'lodash';
+import { DatabaseSource } from 'src/database/interface/database.interface';
 
 @Injectable()
 export class CommentService {
     constructor(
-        @InjectRepository(Comment) private commentRepository: Repository<Comment>,
+        @InjectRepository(CommentEntity, DatabaseSource.Primary) private commentRepository: Repository<CommentEntity>,
         private bookService: BookService
     ) { }
 
-    async create({ title, message, entityType, entityId }: CreateCommentDto, user: User): Promise<Comment> {
+    async create({ title, message, entityType, entityId }: CreateCommentDto, user: UserEntity): Promise<CommentEntity> {
         await this.validateEntity(entityType, entityId, true);
         const comment = this.commentRepository.create({ title, message, entityType, entityId, user });
         return await this.commentRepository.save(comment);
     }
 
-    async findAll({ entityType, entityId, user, limit, page }: FindCommentsDto, mergeCondition: boolean = false): Promise<IPagination<Comment>> {
-        let where: FindOptionsWhere<Comment>[] = [
+    async findAll({ entityType, entityId, user, limit, page }: FindCommentsDto, mergeCondition: boolean = false): Promise<IPagination<CommentEntity>> {
+        let where: FindOptionsWhere<CommentEntity>[] = [
             (entityType) ?
                 { entityType }
                 : null,
@@ -50,7 +51,7 @@ export class CommentService {
         }
     }
 
-    async findById(id: string, exception: boolean = false): Promise<Comment> {
+    async findById(id: string, exception: boolean = false): Promise<CommentEntity> {
         const comment = await this.commentRepository.findOneBy({ id });
         if (exception && !comment) {
             throw new NotFoundException('comment.invalid-id');
@@ -58,7 +59,7 @@ export class CommentService {
         return comment;
     }
 
-    async remove(id: string): Promise<Comment> {
+    async remove(id: string): Promise<CommentEntity> {
         const comment = await this.findById(id, true);
         return this.commentRepository.remove(comment);
     }

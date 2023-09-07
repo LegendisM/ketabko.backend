@@ -1,10 +1,12 @@
 import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, RelationId } from "typeorm";
 import { OrderStatus, OrderableType } from "../interface/order.interface";
-import { User } from "src/modules/user/entity/user.entity";
-import { Payment } from "src/modules/payment/entity/payment.entity";
+import { UserEntity } from "./../../user/entity/user.entity";
+import { PaymentEntity } from "./../../payment/entity/payment.entity";
 
-@Entity()
-export class Order {
+@Entity({
+    name: "order",
+})
+export class OrderEntity {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
@@ -31,12 +33,12 @@ export class Order {
     @CreateDateColumn()
     createdAt: Date;
 
-    @OneToMany(() => Payment, (payment) => payment.order)
-    payments: Payment[];
+    @OneToMany(() => PaymentEntity, (payment) => payment.order)
+    payments: PaymentEntity[];
 
-    @ManyToOne(() => User, (user) => user.orders, { onDelete: 'CASCADE' })
-    user: User;
+    @ManyToOne(() => UserEntity, (user) => user.orders, { onDelete: 'CASCADE' })
+    user: UserEntity;
 
-    @RelationId((order: Order) => order.user)
+    @RelationId((order: OrderEntity) => order.user)
     userId: string;
 }

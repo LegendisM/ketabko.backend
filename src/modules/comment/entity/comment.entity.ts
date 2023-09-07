@@ -1,9 +1,11 @@
-import { User } from "src/modules/user/entity/user.entity";
+import { UserEntity } from "./../../../modules/user/entity/user.entity";
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn, RelationId } from "typeorm";
 import { CommentableType } from "../interface/comment.interface";
 
-@Entity()
-export class Comment {
+@Entity({
+    name: "comment",
+})
+export class CommentEntity {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
@@ -23,9 +25,9 @@ export class Comment {
     @Column({ type: 'uuid', nullable: false })
     entityId: string;
 
-    @ManyToOne(() => User, (user) => user.comments, { onDelete: 'CASCADE' })
-    user: User;
+    @ManyToOne(() => UserEntity, (user) => user.comments, { onDelete: 'CASCADE' })
+    user: UserEntity;
 
-    @RelationId((comment: Comment) => comment.user)
+    @RelationId((comment: CommentEntity) => comment.user)
     userId: string;
 }

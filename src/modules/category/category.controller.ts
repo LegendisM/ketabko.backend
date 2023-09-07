@@ -2,8 +2,8 @@ import { Controller, Get, Post, Patch, Delete, Query, Param, Body, ParseUUIDPipe
 import { ApiConflictResponse, ApiCreatedResponse, ApiNotFoundResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { CategoryService } from './category.service';
 import { FindCategoriesDto } from './dto/find-category.dto';
-import { IPagination } from 'src/common/interface/pagination.interface';
-import { Category } from './entity/category.entity';
+import { IPagination } from './../../common/interface/pagination.interface';
+import { CategoryEntity } from './entity/category.entity';
 import { Roles } from '../user/decorator/role.decorator';
 import { Role } from '../user/interface/role.interface';
 import { CreateCategoryDto } from './dto/create-category.dto';
@@ -23,7 +23,7 @@ export class CategoryController {
     @ApiOkResponse({
         description: 'Receive Array Of Categories With Paginate'
     })
-    async getCategories(@Query() findDto: FindCategoriesDto): Promise<IPagination<Category>> {
+    async getCategories(@Query() findDto: FindCategoriesDto): Promise<IPagination<CategoryEntity>> {
         return await this.categoryService.findAll(findDto);
     }
 
@@ -34,7 +34,7 @@ export class CategoryController {
     @ApiNotFoundResponse({
         description: 'Category Not Found'
     })
-    async getCategoryById(@Param('id', ParseUUIDPipe) id: string): Promise<Category> {
+    async getCategoryById(@Param('id', ParseUUIDPipe) id: string): Promise<CategoryEntity> {
         return this.categoryService.findById(id);
     }
 
@@ -46,7 +46,7 @@ export class CategoryController {
     @ApiConflictResponse({
         description: 'Duplicate Category With Same Name'
     })
-    async createCategory(@Body() createDto: CreateCategoryDto): Promise<Category> {
+    async createCategory(@Body() createDto: CreateCategoryDto): Promise<CategoryEntity> {
         return await this.categoryService.create(createDto);
     }
 

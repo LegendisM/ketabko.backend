@@ -1,4 +1,4 @@
-import { Payment } from "../entity/payment.entity";
+import { PaymentEntity } from "../entity/payment.entity";
 import { PaymentDriverType } from "../interface/payment-driver.interface";
 import { IPaymentRequest, IPaymentVerify } from "../interface/payment.interface";
 
@@ -11,6 +11,6 @@ export abstract class PaymentDriver {
         verifyEndpoint: string,
         callbackEndpoint: string
     };
-    abstract request(payment: Payment): Promise<IPaymentRequest>;
+    abstract request(payment: PaymentEntity): Promise<IPaymentRequest>;
     abstract verify(data: Record<string, string>): Promise<IPaymentVerify>;
 }

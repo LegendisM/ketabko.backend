@@ -3,15 +3,15 @@ import { ApiConflictResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { StorageService } from './storage.service';
 import { Auth } from '../auth/decorator/auth.decorator';
 import { CurrentUser } from '../user/decorator/user.decorator';
-import { User } from '../user/entity/user.entity';
-import { StorageFile } from './entity/storage-file.entity';
+import { UserEntity } from '../user/entity/user.entity';
+import { StorageFileEntity } from './entity/storage-file.entity';
 import { Roles } from '../user/decorator/role.decorator';
 import { Role } from '../user/interface/role.interface';
-import { IPagination } from 'src/common/interface/pagination.interface';
-import { PaginationDto } from 'src/common/dto/pagination.dto';
+import { IPagination } from './../../common/interface/pagination.interface';
+import { PaginationDto } from './../../common/dto/pagination.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ParseStorageFilePipe } from './pipe/parse-storage-file.pipe';
-import { CompressedFile } from 'src/common/decorator/compress.decorator';
+import { CompressedFile } from './../../common/decorator/compress.decorator';
 import { CreateStorageFileDto } from './dto/create-storage-file.dto';
 
 @ApiTags('Storages')
@@ -30,7 +30,7 @@ export class StorageController {
     @ApiOkResponse({
         description: 'Receive Array Of Files With Paginate'
     })
-    async getAllFiles(@Query() paginationDto: PaginationDto): Promise<IPagination<StorageFile>> {
+    async getAllFiles(@Query() paginationDto: PaginationDto): Promise<IPagination<StorageFileEntity>> {
         return await this.storageService.findAll(paginationDto);
     }
 
@@ -38,7 +38,7 @@ export class StorageController {
     @ApiOkResponse({
         description: 'Receive Array Of User Files'
     })
-    async getUserFiles(@CurrentUser() user: User): Promise<StorageFile[]> {
+    async getUserFiles(@CurrentUser() user: UserEntity): Promise<StorageFileEntity[]> {
         return await this.storageService.findAllByUser(user);
     }
 
@@ -67,7 +67,7 @@ export class StorageController {
     })
     async uploadUserFile(
         @Body() createDto: CreateStorageFileDto,
-        @CurrentUser() user: User,
+        @CurrentUser() user: UserEntity,
         @UploadedFile(new ParseStorageFilePipe())
         @CompressedFile() file: Express.Multer.File
     ) {

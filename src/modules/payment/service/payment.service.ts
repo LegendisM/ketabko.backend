@@ -1,31 +1,32 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Payment } from '../entity/payment.entity';
+import { PaymentEntity } from '../entity/payment.entity';
 import { FindOptionsWhere, Repository } from 'typeorm';
 import { OrderService } from '../../order/order.service';
-import { User } from '../../user/entity/user.entity';
-import { IPagination } from 'src/common/interface/pagination.interface';
+import { UserEntity } from '../../user/entity/user.entity';
+import { IPagination } from './../../../common/interface/pagination.interface';
 import { FindPaymentsDto } from '../dto/find-payment.dto';
 import { CreatePaymentDto } from '../dto/create-payment.dto';
 import { PaymentDriverType } from '../interface/payment-driver.interface';
 import _ from 'lodash';
+import { DatabaseSource } from 'src/database/interface/database.interface';
 
 @Injectable()
 export class PaymentService {
     constructor(
-        @InjectRepository(Payment) private paymentRepository: Repository<Payment>,
+        @InjectRepository(PaymentEntity, DatabaseSource.Primary) private paymentRepository: Repository<PaymentEntity>,
         private orderService: OrderService
     ) { }
 
-    async create({ order, driver }: CreatePaymentDto, user: User): Promise<Payment> {
+    async create({ order, driver }: CreatePaymentDto, user: UserEntity): Promise<PaymentEntity> {
         const payment = this.paymentRepository.create({ driver, user });
         await this.orderService.validateForPayment(order, true);
         payment.order = await this.orderService.findById(order, true);
         return await this.paymentRepository.save(payment);
     }
 
-    async findAll({ status, user, limit, page }: FindPaymentsDto, mergeCondition: boolean = false): Promise<IPagination<Payment>> {
-        let where: FindOptionsWhere<Payment>[] = [
+    async findAll({ status, user, limit, page }: FindPaymentsDto, mergeCondition: boolean = false): Promise<IPagination<PaymentEntity>> {
+        let where: FindOptionsWhere<PaymentEntity>[] = [
             (status) ?
                 { status }
                 : null,
@@ -48,11 +49,11 @@ export class PaymentService {
         }
     }
 
-    async findAllByUser(user: User): Promise<Payment[]> {
+    async findAllByUser(user: UserEntity): Promise<PaymentEntity[]> {
         return await this.paymentRepository.findBy({ user: { id: user.id } });
     }
 
-    async findById(id: string, exception: boolean = false): Promise<Payment> {
+    async findById(id: string, exception: boolean = false): Promise<PaymentEntity> {
         const payment = await this.paymentRepository.findOneBy({ id });
         if (exception && !payment) {
             throw new NotFoundException('payment.invalid-id');
@@ -60,7 +61,7 @@ export class PaymentService {
         return payment;
     }
 
-    async findByAuthority(authority: string, driver: PaymentDriverType, exception: boolean = false): Promise<Payment> {
+    async findByAuthority(authority: string, driver: PaymentDriverType, exception: boolean = false): Promise<PaymentEntity> {
         const payment = await this.paymentRepository.findOneBy({ authority, driver });
         if (exception && !payment) {
             throw new NotFoundException('payment.invalid-authority');
@@ -68,13 +69,13 @@ export class PaymentService {
         return payment;
     }
 
-    async update(id: string, updateDto: Partial<Payment>): Promise<Payment> {
+    async update(id: string, updateDto: Partial<PaymentEntity>): Promise<PaymentEntity> {
         const payment = await this.findById(id, true);
         Object.assign(payment, updateDto);
         return await this.paymentRepository.save(payment);
     }
 
-    async remove(id: string): Promise<Payment> {
+    async remove(id: string): Promise<PaymentEntity> {
         const payment = await this.findById(id, true);
         return await this.paymentRepository.remove(payment);
     }

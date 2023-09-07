@@ -2,24 +2,25 @@ import _ from 'lodash';
 import slugify from "slugify";
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateBookDto } from '../dto/book/create-book.dto';
-import { Book } from '../entity/book.entity';
+import { BookEntity } from '../entity/book.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Between, FindOptionsWhere, Like, Repository } from 'typeorm';
 import { UpdateBookDto } from '../dto/book/update-book.dto';
 import { FindBooksDto } from '../dto/book/find-book.dto';
-import { IPagination } from 'src/common/interface/pagination.interface';
+import { IPagination } from './../../../common/interface/pagination.interface';
 import { StorageService } from '../../storage/storage.service';
-import { AuthorService } from 'src/modules/author/author.service';
+import { AuthorService } from './../../author/author.service';
+import { DatabaseSource } from 'src/database/interface/database.interface';
 
 @Injectable()
 export class BookService {
     constructor(
-        @InjectRepository(Book) private bookRepository: Repository<Book>,
+        @InjectRepository(BookEntity, DatabaseSource.Primary) private bookRepository: Repository<BookEntity>,
         private authorService: AuthorService,
         private storageService: StorageService
     ) { }
 
-    async create(createDto: CreateBookDto): Promise<Book> {
+    async create(createDto: CreateBookDto): Promise<BookEntity> {
         const book = this.bookRepository.create(_.omit(createDto, ['author', 'cover', 'audio']));
         book.author = await this.authorService.findById(createDto.author, true);
         book.cover = await this.storageService.findById(createDto.cover, true);
@@ -27,8 +28,8 @@ export class BookService {
         return await this.bookRepository.save(book);
     }
 
-    async findAll({ title, description, minPrice, maxPrice, category, limit, page }: FindBooksDto, mergeCondition: boolean = false): Promise<IPagination<Book>> {
-        let where: FindOptionsWhere<Book>[] = [
+    async findAll({ title, description, minPrice, maxPrice, category, limit, page }: FindBooksDto, mergeCondition: boolean = false): Promise<IPagination<BookEntity>> {
+        let where: FindOptionsWhere<BookEntity>[] = [
             (title) ?
                 { title: Like(`%${title}%`) }
                 : null,
@@ -57,7 +58,7 @@ export class BookService {
         };
     }
 
-    async findById(id: string, exception: boolean = false): Promise<Book> {
+    async findById(id: string, exception: boolean = false): Promise<BookEntity> {
         const book = await this.bookRepository.findOneBy({ id });
         if (exception && !book) {
             throw new NotFoundException('book.invalid-id');
@@ -65,7 +66,7 @@ export class BookService {
         return book;
     }
 
-    async update(id: string, updateDto: UpdateBookDto): Promise<Book> {
+    async update(id: string, updateDto: UpdateBookDto): Promise<BookEntity> {
         const book = await this.findById(id, true);
         Object.assign(book, _.omit(updateDto, ['cover', 'audio']));
         if (book.cover.id != updateDto.cover) {
@@ -77,7 +78,7 @@ export class BookService {
         return await this.bookRepository.save(book);
     }
 
-    async remove(id: string): Promise<Book> {
+    async remove(id: string): Promise<BookEntity> {
         const book = await this.findById(id, true);
         return await this.bookRepository.remove(book);
     }

@@ -1,10 +1,12 @@
 import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, RelationId } from "typeorm";
-import { BookSection } from "./book-section.entity";
-import { User } from "src/modules/user/entity/user.entity";
+import { BookSectionEntity } from "./book-section.entity";
+import { UserEntity } from "./../../user/entity/user.entity";
 import { BookSectionFieldValue } from "../class/book-section-field-value.class";
 
-@Entity()
-export class BookSectionDocument {
+@Entity({
+    name: "book_section_document",
+})
+export class BookSectionDocumentEntity {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
@@ -23,12 +25,12 @@ export class BookSectionDocument {
     @CreateDateColumn()
     createdAt: Date;
 
-    @ManyToOne(() => BookSection, (section) => section.documents, { eager: true, onDelete: 'CASCADE' })
-    section: BookSection;
+    @ManyToOne(() => BookSectionEntity, (section) => section.documents, { eager: true, onDelete: 'CASCADE' })
+    section: BookSectionEntity;
 
-    @ManyToOne(() => User, (user) => user.bookSectionDocuments, { onDelete: 'CASCADE' })
-    user: User;
+    @ManyToOne(() => UserEntity, (user) => user.bookSectionDocuments, { onDelete: 'CASCADE' })
+    user: UserEntity;
 
-    @RelationId((bookSectionDocument: BookSectionDocument) => bookSectionDocument.user)
+    @RelationId((bookSectionDocument: BookSectionDocumentEntity) => bookSectionDocument.user)
     userId: string;
 }

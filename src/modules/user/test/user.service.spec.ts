@@ -1,6 +1,6 @@
 import { Test, TestingModule } from "@nestjs/testing";
 import { UserService } from "../user.service";
-import { User } from "../entity/user.entity";
+import { UserEntity } from "../entity/user.entity";
 import { getRepositoryToken } from "@nestjs/typeorm";
 import { UpdateUserDto } from "../dto/update-user.dto";
 
@@ -19,7 +19,7 @@ describe('User Service', () => {
             providers: [
                 UserService,
                 {
-                    provide: getRepositoryToken(User),
+                    provide: getRepositoryToken(UserEntity),
                     useValue: mockUserRepository
                 }
             ]
@@ -34,7 +34,7 @@ describe('User Service', () => {
 
     describe('create', () => {
         it('create new user', async () => {
-            const mockUserValue = { id: '1', username: 'alexa', email: '', password: '1234' } as User;
+            const mockUserValue = { id: '1', username: 'alexa', email: '', password: '1234' } as UserEntity;
             mockUserRepository.create.mockResolvedValue(mockUserValue);
             mockUserRepository.save.mockResolvedValue(mockUserValue);
             const user = await service.create({ username: mockUserValue.username, password: mockUserValue.password });
@@ -62,7 +62,7 @@ describe('User Service', () => {
         });
 
         it('findOne valid user', async () => {
-            mockUserRepository.findOne.mockResolvedValue({ username: 'alexa' } as User);
+            mockUserRepository.findOne.mockResolvedValue({ username: 'alexa' } as UserEntity);
             const user = await service.findOne({ username: 'alexa' });
             expect(user).toBeDefined();
             expect(user.username).toBe('alexa');
@@ -89,7 +89,7 @@ describe('User Service', () => {
         });
 
         it('findById valid user', async () => {
-            mockUserRepository.findOneBy.mockResolvedValue({ id: 'uuid', username: 'alexa' } as User);
+            mockUserRepository.findOneBy.mockResolvedValue({ id: 'uuid', username: 'alexa' } as UserEntity);
             const user = await service.findById('uuid');
             expect(user).toBeDefined();
             expect(user.id).toBe('uuid');
@@ -110,7 +110,7 @@ describe('User Service', () => {
         });
 
         it('update user successfully', async () => {
-            const mockUserValue = { id: 'uuid', username: 'alexa', email: '' } as User;
+            const mockUserValue = { id: 'uuid', username: 'alexa', email: '' } as UserEntity;
             const mockUpdateValue = { username: 'alexa', email: '' } as UpdateUserDto;
             mockUserRepository.findOneBy.mockResolvedValue(mockUserValue);
             mockUserRepository.save.mockResolvedValue(mockUserValue);
@@ -134,7 +134,7 @@ describe('User Service', () => {
         });
 
         it('remove user successfully', async () => {
-            const mockUserValue = { id: 'uuid', username: 'alexa' } as User;
+            const mockUserValue = { id: 'uuid', username: 'alexa' } as UserEntity;
             mockUserRepository.findOneBy.mockResolvedValue(mockUserValue);
             mockUserRepository.remove.mockResolvedValue(mockUserValue);
             const user = await service.remove('uuid');

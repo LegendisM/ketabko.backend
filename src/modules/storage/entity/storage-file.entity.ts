@@ -1,9 +1,11 @@
-import { User } from "src/modules/user/entity/user.entity";
+import { UserEntity } from "./../../user/entity/user.entity";
 import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, RelationId } from "typeorm";
 import { StorageDriver, StorageFileType } from "../interface/storage.interface";
 
-@Entity()
-export class StorageFile {
+@Entity({
+    name: "storage_file",
+})
+export class StorageFileEntity {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
@@ -39,9 +41,9 @@ export class StorageFile {
     @CreateDateColumn()
     createdAt: Date;
 
-    @ManyToOne(() => User, (user) => user.files, { onDelete: 'CASCADE', nullable: true })
-    user: User;
+    @ManyToOne(() => UserEntity, (user) => user.files, { onDelete: 'CASCADE', nullable: true })
+    user: UserEntity;
 
-    @RelationId((storageFile: StorageFile) => storageFile.user)
+    @RelationId((storageFile: StorageFileEntity) => storageFile.user)
     userId: string;
 }
