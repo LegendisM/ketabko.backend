@@ -91,10 +91,10 @@ export class OrderService {
 
     async validateForPayment(id: string, exception: boolean = false): Promise<boolean> {
         const order = await this.findById(id, true);
-        const state = order.status == OrderStatus.Complete;
-        if (exception && !state) {
+        const paymented = order.status == OrderStatus.Complete;
+        if (exception && paymented) {
             throw new ConflictException('order.already-paymented');
         }
-        return state;
+        return !paymented;
     }
 }

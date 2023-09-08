@@ -44,6 +44,7 @@ export class PaymentZarinpalDriver extends PaymentDriver implements OnModuleInit
                 {
                     merchant_id: this.config.token,
                     amount: payment.order.price,
+                    description: "Transaction",
                     callback_url: `${this.config.callbackEndpoint}${this.type}`
                 }
             )

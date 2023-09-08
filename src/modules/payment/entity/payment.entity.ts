@@ -17,10 +17,10 @@ export class PaymentEntity {
     })
     driver: PaymentDriverType;
 
-    @Column()
+    @Column({ nullable: true })
     authority: string;
 
-    @Column()
+    @Column({ nullable: true })
     tracking: string;
 
     @Column({
