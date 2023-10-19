@@ -9,5 +9,5 @@ export const SecondaryDataSource = new DataSource({
     password: 'test',
     entities: [],
     synchronize: true,
-    migrations: ['./migration/*{.ts,.js}']
+    migrations: [`${__dirname}/migration/*{.ts,.js}`],
 })

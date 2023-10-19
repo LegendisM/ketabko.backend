@@ -34,5 +34,5 @@ export const PrimaryDataSource = new DataSource({
         BookSectionDocumentEntity,
     ],
     synchronize: config.NODE_ENV == "development",
-    migrations: ['./migration/*{.ts,.js}'],
+    migrations: [`${__dirname}/migration/*{.ts,.js}`],
 });
