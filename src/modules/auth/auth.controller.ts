@@ -12,7 +12,7 @@ import { IAuthResult } from './interface/auth.interface';
 })
 export class AuthController {
     constructor(
-        private authSerivce: AuthService
+        private authService: AuthService
     ) { }
 
     @Post('/signup')
@@ -24,7 +24,7 @@ export class AuthController {
         @Body() authDto: AuthDto,
         @I18n() i18n: I18nContext
     ): Promise<IAuthResult> {
-        const { state, token, message } = await this.authSerivce.signup(authDto);
+        const { state, token, message } = await this.authService.signup(authDto);
         return {
             state,
             token,
@@ -41,7 +41,7 @@ export class AuthController {
         @Body() authDto: AuthDto,
         @I18n() i18n: I18nContext
     ): Promise<IAuthResult> {
-        const { state, token, message } = await this.authSerivce.signin(authDto);
+        const { state, token, message } = await this.authService.signin(authDto);
         return {
             state,
             token,
